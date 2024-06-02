@@ -45,7 +45,7 @@ Start Settings
         var block_view_source = true;
         var block_Copy = true;
         var diasble_alerts = true;
-        var disable_consoles_log = false;
+        var DisableConsole = false;
         var Allowed_Domains = ["http://localhost/", "127.0.0.1", "127.0.0.1:5500", "localhost"]; // برای اینکه در لوکال هاست اجرا شود
         var redirection_url = "http://www.farhamaghdasi.ir/";
         var password_page_action = true;

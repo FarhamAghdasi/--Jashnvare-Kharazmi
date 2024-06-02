@@ -32,7 +32,6 @@ if (isset($_SESSION['email']) && !empty($_SESSION['email'])) {
         <title>پنل کاربری آنتی ریپ | خوش آمدید !</title>
 
         <link rel="shortcut icon" type="image/png" href="images/favicon.png" />
-        <link href="vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet">
         <link href="css/style.css" rel="stylesheet">
 
     </head>
@@ -139,7 +138,7 @@ if (isset($_SESSION['email']) && !empty($_SESSION['email'])) {
 								<li>
                                     <!-- اینجا هم به صورت ajax انجام میشه -->
                                 <form id="logout-form" action="" method="post" role="form">
-                                    <input id="submit-btn" class="input-group-text" type="button" onclick="ajaxLogout()" value="خروج از حساب کاربری"></input>
+                                    <input id="submit-btn" class="input-group-text" type="button" onclick="LogOut()" value="خروج از حساب کاربری"></input>
                                 </form>
                         </li>
                             </div>
@@ -163,10 +162,10 @@ if (isset($_SESSION['email']) && !empty($_SESSION['email'])) {
         </div>
 
         <script src="vendor/global/global.min.js"></script>
-        <script src="vendor/jquery-nice-select/js/jquery.nice-select.min.js"></script>
         <script src="js/custom.min.js"></script>
         <script src="js/deznav-init.js"></script>
 		<script src="js/ajax.js"></script>
+        <script src="vendor/sweetalert.min.js"></script>
     </body>
 
     </html>

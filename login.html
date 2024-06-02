@@ -91,7 +91,6 @@
 		<link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
 		<link rel="stylesheet" href="assets/fonts/themify-icons.css">
         <link rel="stylesheet" href="assets/css/slicknav.css">		
-		<link rel="stylesheet" href="assets/css/magnific-popup.css">	
 		<link rel="stylesheet" href="assets/css/animate.css">			
 		<link rel="stylesheet" href="assets/css/slider.css" />				
 		<link rel="stylesheet" href="assets/css/style.css" />	
@@ -150,32 +149,36 @@
 		<div class="container">
 			<div class="row">				
 				<div class="col-lg-6 offset-lg-3 col-xs-12">
-					<div class="login">
-						<h4 class="login_register_title">اگر اکانتی در سامانه دارید ، وارد شوید !</h4>
-						<form id="login-form" action="" method="post" role="form">
-							<div class="form-group">
-								<label for="login-email-id">ایمیل</label>
-								<span id="email-info"></span>
-								<input type="email" name="login-email-id" id="login-email-id" class="input-field" placeholder="">
-							</div>
-							<div class="form-group">
-								<label for="login-password">رمز عبور</label>
-								<span id="password-info"></span>
-								<div class="password-field">
-									<input type="password" name="login-password" id="login-password" class="input-field" placeholder="">
-									<i class="fa fa-eye" id="togglePassword"></i>
+					<div class="row">
+						<div class="login">
+							<h4 class="login_register_title">اگر اکانتی در سامانه دارید ، وارد شوید !</h4>
+							<form id="login-form" action="" method="post" role="form">
+								<div class="form-group">
+									<label for="login-email-id">ایمیل</label>
+									<span id="email-info"></span>
+									<input type="email" name="login-email-id" id="login-email-id" class="input-field" placeholder="">
+									<span class="focus-input10"></span>
 								</div>
-							</div>
-							<div class="form-group col-lg-12">
-								<input type="button" id="submit-btn" class="btn_one" value="وارد شوید" onclick="ajaxLogin();red()">
-								<!-- <button type="submit" class="btn_one"></button> -->
-							</div>
-						</form>
-						
-					<div class="success-message" id="login-success-message" style="display: none"></div>
-					<div class="error-message" id="login-error-message" style="display: none"></div>
-						<p>آیا شما اکانتی ندارید ؟ <a href="register.html">اکنون ثبت نام کنید</a></p>
-						<p> آیا رمز خود را فراموش کردید ؟ <a href="forget-password.html">فراموشی رمز</a></p>
+								<div class="form-group">
+									<label for="login-password">رمز عبور</label>
+									<span id="password-info"></span>
+									<div class="password-field">
+										<input type="password" name="login-password" id="login-password" class="input-field" placeholder="">
+										<span class="focus-input10"></span>
+										<i class="fa fa-eye" id="togglePassword"></i>
+									</div>
+								</div>
+								<div class="form-group col-lg-12">
+									<a type="button" id="submit-btn" class="btn_one loginbutton text-center">وارد شوید</a>
+									<!-- <button type="submit" class="btn_one"></button> -->
+								</div>
+							</form>
+							
+						<div class="success-message" id="login-success-message" style="display: none"></div>
+						<div class="error-message" id="login-error-message" style="display: none"></div>
+							<p>آیا شما اکانتی ندارید ؟ <a href="register.html">اکنون ثبت نام کنید</a></p>
+							<p> آیا رمز خود را فراموش کردید ؟ <a href="forget-password.html">فراموشی رمز</a></p>
+						</div>
 					</div>
 				</div>	
 			</div>
@@ -196,11 +199,10 @@
 		<script src="assets/js/jquery-1.12.4.min.js"></script>
 		<script src="assets/bootstrap/js/bootstrap.min.js"></script>			
 		<script src="assets/js/jquery.slicknav.js"></script>			
-		<script src="assets/js/jquery.magnific-popup.min.js"></script>		
 		<script src="assets/js/scrolltopcontrol.js"></script>	
-		<script src="assets/js/purecounter_vanilla.js"></script>			
 		<script src="assets/js/wow.min.js"></script>				
-		<script src="assets/js/scripts.js"></script>				
+		<script src="assets/js/scripts.js"></script>		
+		<script src="assets/js/libs/sweetalert.min.js"></script>		
 		<script src="assets/js/ajax.js"></script>				
 </body>
 </html>

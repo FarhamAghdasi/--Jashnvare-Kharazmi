@@ -1,23 +1,45 @@
-// این ساختار هم دقیقا مشابه فایل ajax قسمت اصلی بود ولی اینجا به این دلیل که صفحه داشبورد است ، ناچار شدم جداگانه بسازم
-function ajaxLogout() {
-		$.ajax({
-			url: '../assets/php/logout.php',
-			type: 'POST',
-            dataType: 'json',
-			success: function(response) {
-				if (response.status === 'success') {
-					alert("شما با موفقیت خارج شدید !");
-					// اینجا هم دوباره به صفحه لاگین ریداکت میکنه
-					window.location.replace("../login.html")
-				} else {
-					alert(response.message);
-				}
-			},
-			error: function(xhr, status, error) {
-				// اینجا هم ارور هارو نشون میده از طریق json که از فایل php صادر میشه
-				alert(xhr.responseText);
-			}
-		});
+/**
+ * logout Form With Ajax
+ */
+function LogOut() { 
+	$.ajax({
+		url: '../assets/php/logout.php',
+		type: 'POST',
+		dataType: 'json',
+		success: (response) => {
+			if (response.status === 'success') {
+				swal({
+					title: "شما با موفقیت خارج شدید",
+					text: "در طی چند ثانیه دیگه به صفحه ورود بر می گردید",
+					icon: "success",
+					button: "رویت شد",
+				}).then(() => {
+					setTimeout(() => {
+						window.location.replace("../login.html")
+					}, 5000);
+				  });
 
-        
-    }
+
+				
+			} else {
+				swal({
+					title: "با ارور مواجه شدید !",
+					text: response.message,
+					icon: "error",
+					button: "رویت شد",
+				});
+			}
+		},
+		error: (xhr) => {
+			swal({
+				title: "با ارور مواجه شدید !",
+				text: xhr.message,
+				icon: "error",
+				button: "رویت شد",
+			});
+		}
+	});
+ }
+
+
+

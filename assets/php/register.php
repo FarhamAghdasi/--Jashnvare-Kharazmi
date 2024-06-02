@@ -1,10 +1,7 @@
 <?php
 
 // این اطلاعات متصل شدن به دیتابیس برای لوکال هاست است و برای اجرا در هاست خودتون باید مقادیر رو تغییر بدید
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'form_php');
-define('DB_USER', 'root');
-define('DB_PASSWORD', '');
+require 'config.php';
 
 try {
     $conn = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASSWORD); // با روش PDO به دیتابیس متصل میشویم
@@ -47,5 +44,5 @@ try {
 } catch(PDOException $e) {
     // اگه با هندل ارور مواجه شده ، این ارور رو منتقل کنه
     error_log($e->getMessage());
-    echo 'error: خطایی رخ داده است. لطفاً با پشتیبانی تماس بگیرید.';
+    echo 'خطایی رخ داده است. لطفاً با پشتیبانی تماس بگیرید.';
 }

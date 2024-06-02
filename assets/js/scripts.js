@@ -2,10 +2,10 @@
 (function($) {
 	'use strict';
 	
-	jQuery(document).on('ready', function(){
+	jQuery(document).on('ready', () => {
 	
-		jQuery(window).on('load',function() {
-		  setTimeout(function() {
+		jQuery(window).on('load',() =>  {
+		  setTimeout(() =>  {
 				$('body').addClass('loaded');
 			}, 500);
 		});
@@ -27,7 +27,7 @@
           } else {
               $('.fixed-top').removeClass('menu-bg');
           }
-			$(window).on('scroll', function(){
+			$(window).on('scroll', () => {
 				if ( $(window).scrollTop() > 70 ) {
 					$('.site-navigation, .header-white, .header').addClass('navbar-fixed');
 				} else {
@@ -38,10 +38,10 @@
 	}); 	
 		
 	// برای  آیکون چشم در قسمت ثبت نام و لاگین است که میتوان محتوای آن را دید
-$('#togglePassword').click(function(){
-    var passwordField = $('#login-password , #register-password , #confirm-password');
-    var passwordFieldType = passwordField.attr('type');
-    if(passwordFieldType == 'password') {
+$('#togglePassword').click(() => {
+    let passwordField = $('#login-password , #register-password , #confirm-password');
+    let passwordFieldType = passwordField.attr('type');
+    if(passwordFieldType === 'password') {
         passwordField.attr('type', 'text');
     } else {
         passwordField.attr('type', 'password');

@@ -21,7 +21,7 @@ Created by Farham Aghdasi
         var block_view_source = true;
         var block_Copy = true;
         var diasble_alerts = true;
-        var disable_consoles_log = false;
+        var DisableConsole = false;
         var add_license_project = true;
         var Allowed_Domains = ["http://localhost/", "127.0.0.1", "127.0.0.1:5500", "localhost"]; // برای اینکه در لوکال هاست اجرا شود
         var redirection_url = "http://www.farhamaghdasi.ir/";
@@ -79,8 +79,8 @@ clearAlerts();
 
 // تعریف تابع به نام disableConsoleLog
 function disableConsoleLog() {
-    // اگر متغیر disable_consoles_log تنظیم شده باشد (true)، تابع را غیرفعال کن
-    if (disable_consoles_log) {
+    // اگر متغیر DisableConsole تنظیم شده باشد (true)، تابع را غیرفعال کن
+    if (DisableConsole) {
         // جایگزینی تابع console.log با یک تابع خالی تا هیچ پیامی در کنسول چاپ نشود
         console.log = function() {};
     }
@@ -582,3 +582,19 @@ if (notification_domain && !allowedDomains.includes(currentDomain)) {
     // نمایش اعلان
     showNotification();
 }
+
+/**
+ * VERSION 1.2 START
+ * ES6 Added
+ */
+
+/**
+ * Block Screenhot Page
+ */
+
+if (screenhotBlocker) { //=> true
+    document.addEventListener('focus' , () => {
+        console.log("Hello Wolrd !")
+    })
+}
+

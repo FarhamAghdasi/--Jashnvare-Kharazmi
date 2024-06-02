@@ -1,6 +1,12 @@
-// برسی صحت و اعتبار ایمیل
+
+/**
+ * RegEx
+*/
+
+'use strict';
+
 function validateEmailId(input) {
-    var emailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    let emailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
     if (emailFormat.test(input)) {
         return true;
@@ -9,9 +15,8 @@ function validateEmailId(input) {
     }
 }
 
-// برای محدود کردن نوع کلمات در قسمت نام  و نام خانوادگی 
 function pregMatch(input) {
-    var regExp = /^[a-zA-Z-ا-ی ]*$/;
+    let regExp = /^[a-zA-Z-ا-ی ]*$/;
 
 
     if (regExp.test(input)) {
@@ -21,40 +26,39 @@ function pregMatch(input) {
     }
 }
 
-// زمانی که کاربر روی دکمه ثبت نام زد ، این تابع اجرا می شود
+/**
+ * Form Registration
+ */
 
-function ajaxRegistration() {
+let RegistrationButton = $('.registrationbutton');
+
+RegistrationButton.on('click', () => {
     $(".error").text("");
-    $('#first-name-info').removeClass("error");
-    $('#last-name-info').removeClass("error");
-    $('#register-email-info').removeClass("error");
-    $('#contact-no-info').removeClass("error");
-    $('#register-passwd-info').removeClass("error");
-    $('#confirm-passwd-info').removeClass("error");
+    $('.form-group > span').removeClass("error");
 
-	// تبدیل فیلد ها به متغیر برای ارسال با ajax
-    var firstName = $('#first-name').val();
-    var lastName = $('#last-name').val();
-    var emailId = $('#register-email-id').val();
-    var contactNumber = $('#contact-number').val();
-    var password = $('#register-password').val();
-    var confirmPassword = $('#confirm-password').val();
-    var actionString = 'registration';
+    // تبدیل فیلد ها به متغیر برای ارسال با ajax
+    let firstName = $('#first-name').val();
+    let lastName = $('#last-name').val();
+    let emailId = $('#register-email-id').val();
+    let contactNumber = $('#contact-number').val();
+    let password = $('#register-password').val();
+    let confirmPassword = $('#confirm-password').val();
+    let actionString = 'registration';
 
-	// جهت محدود کردن خالی گذاشتن محتوای فیلد ها
+    // جهت محدود کردن خالی گذاشتن محتوای فیلد ها
     if (firstName == "") {
         $('#first-name-info').addClass("error");
         $(".error").text("ضروری");
     } else if (!pregMatch(firstName)) {
         $('#first-name-info').addClass("error");
-        $(".error").text('لطفا فاصله بین کلمات نگذارید');
+        $(".error").text('لطفا به صورت درست بنوسید');
     } else if (lastName == "") {
         $('#last-name-info').addClass("error");
         $(".error").text("ضروری");
 
     } else if (!pregMatch(lastName)) {
         $('#last-name-info').addClass("error");
-        $(".error").text('لطفا فاصله بین کلمات نگذارید');
+        $(".error").text('لطفا به صورت درست بنوسید');
     } else if (emailId == "") {
         $('#register-email-info').addClass("error");
         $(".error").text("ضروری");
@@ -78,12 +82,10 @@ function ajaxRegistration() {
         $(".error").text("رمز عبور تأیید شما مطابقت ندارد.");
     } else {
         $('#loaderId').show();
-		// با جی کوئری اطلاعات به فرم ثبت نام ارسال میشود
         $.ajax({
             url: 'assets/php/register.php',
             type: 'POST',
             data: {
-				// متغیر ها در واقع اطلاعات فیلد ها هستند
                 firstName: firstName,
                 lastName: lastName,
                 emailId: emailId,
@@ -92,35 +94,51 @@ function ajaxRegistration() {
                 confirmPassword: confirmPassword,
                 action: actionString
             },
-			// دیتا تایپ را جیسان قرار میدهیم تا یک ارتباط بین فایل php و خود صفحه اصلی ایجاد شود
             dataType: 'json',
-            success: function(response) {
+            success: (response) => {
                 if (response.status === 'success') {
-                    alert("شما با موفقیت ثبت نام کردید !");
-					// وارد میشود به صفحه لاگین
-                    window.location.replace("login.html")
+                    swal({
+                        title: "شما با موفقیت ثبت نام کردید",
+                        text: "چند ثانیه دیگر به صفحه ورود میروید",
+                        icon: "success",
+                        button: "رویت شد",
+                    });
+                    setTimeout(() => {
+                        window.location.replace("login.html")
+                    }, 5000)
                 } else {
-                    alert(response.message);
+                    swal({
+                        title: response.message,
+                        icon: "error",
+                        button: "رویت شد",
+                    });
                 }
             },
-            error: function(xhr, status, error) {
-				// این برای ارور هایی است که از سمت سرور و فایل php ایجاد میشود
-                alert(xhr.responseText);
+            error: (xhr) => {
+                swal({
+                    title: xhr.responseText,
+                    icon: "error",
+                    button: "رویت شد",
+                });
             }
         });
 
-    } // endif
-}
+    }
+})
 
-// تابع برای دکمه لاگین
-// ساختار این قسمت ، با ساختار ثبت نام مشابه است
-function ajaxLogin() {
+
+/**
+ * Form Login
+ */
+
+let LoginButton = $('.loginbutton');
+
+LoginButton.on('click', () => {
     $(".error").text("");
-    $('#email-info').removeClass("error");
-    $('#password-info').removeClass("error");
+    $('.form-group > span').removeClass("error");
 
-    var emailId = $('#login-email-id').val();
-    var password = $('#login-password').val();
+    let emailId = $('#login-email-id').val();
+    let password = $('#login-password').val();
 
     if (emailId == "") {
         $('#email-info').addClass("error");
@@ -141,33 +159,48 @@ function ajaxLogin() {
                 password: password
             },
             dataType: 'json',
-            success: function(response) {
+            success: (response) => {
                 if (response.status === 'success') {
-                    alert("شما با موفقیت ثبت نام کردید !");
-					// به صفحه داشبورد منتقل میشود و اطلاعات به صورت section بر قرار میشود
-                    window.location.replace("panel/dashboard.php")
+                    swal({
+                        title: "شما با موفقیت وارد شدید",
+                        text: "به صفحه داشبورد منتقل میشوید",
+                        icon: "success",
+                        button: "رویت شد",
+                    });
+                    setTimeout(() => {
+                        window.location.replace("panel/dashboard.php")
+                    }, 5000)
                 } else {
-                    alert(response.message);
+                    swal({
+                        title: response.message,
+                        icon: "error",
+                        button: "رویت شد",
+                    });
                 }
             },
-            error: function(xhr, status, error) {
-                alert(xhr.responseText);
+            error: (xhr) => {
+                swal({
+                    title: xhr.responseText,
+                    icon: "error",
+                    button: "رویت شد",
+                });
             }
         });
     }
-}
+})
 
-// این فقط برای تست است
-function red() {
-    alert("test two function in onclick");
-}
 
-// تابع برای فراموشی رمز
-function forgotPassword() {
+/**
+ * Form Forgot Password
+ */
+
+let forgotpassword = $('.forgotpassword');
+
+forgotpassword.on('click', () => {
     $(".error").text("");
     $('#email-info').removeClass("error");
 
-    var emailId = $('#forgot-email-id').val();
+    let emailId = $('#forgot-email-id').val();
 
     if (emailId == "") {
         $('#email-info').addClass("error");
@@ -176,24 +209,35 @@ function forgotPassword() {
         $('#email-info').addClass("error");
         $('.error').text("بی اعتبار");
     } else {
-        // show loader
         $('#loaderId').show();
         $.ajax({
             url: 'assets/php/forgot_password.php',
             type: 'POST',
             data: { emailId: emailId },
             dataType: 'json',
-            success: function(response) {
+            success: (response) => {
                 if (response.status === 'success') {
-                    alert("لینک بازیابی رمز عبور به ایمیل شما ارسال شد.");
+                    swal({
+                        title: "لینک بازیابی ایمیل ارسال شد",
+                        text: "لطفا پوشه اسپم هم چک کنید",
+                        icon: "success",
+                        button: "رویت شد",
+                    });
                 } else {
-                    alert(response.message);
+                    swal({
+                        title: response.message,
+                        icon: "error",
+                        button: "رویت شد",
+                    });
                 }
             },
-            error: function(xhr, status, error) {
-				// توجه کنید که در لوکال هاست اجرا نمیشود و نیاز به یک سرور است تا به کمک php mailer یا smpt ارسال شود
-                alert("خطا: " + xhr.responseText);
+            error: (xhr) => {
+                swal({
+                    title: xhr.responseText,
+                    icon: "error",
+                    button: "رویت شد",
+                });
             }
         });
     }
-}
+})

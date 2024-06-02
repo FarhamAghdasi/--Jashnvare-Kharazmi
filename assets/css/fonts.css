@@ -69,3 +69,24 @@
 	font-style: normal;
 	font-display: swap;
   }
+
+  
+@font-face {
+	font-family: samim;
+	font-style: normal;
+	src: url('../fonts/samin/samim.eot');
+	src: url('../fonts/samin/samim.eot?#iefix') format('embedded-opentype'),  /* ie6-8 */
+		 url('../fonts/samin/samim.woff2') format('woff2'),  /* ff39+,chrome36+, opera24+*/
+		 url('../fonts/samin/samim.woff') format('woff'),  /* ff3.6+, ie9, chrome6+, saf5.1+*/
+		 url('../fonts/samin/samim.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: samim-bold;
+	font-style: normal;
+	src: url('../fonts/samin/samim-bold.eot');
+	src: url('../fonts/samin/samim-bold.eot?#iefix') format('embedded-opentype'),  /* ie6-8 */
+		 url('../fonts/samin/samim-bold.woff2') format('woff2'),  /* ff39+,chrome36+, opera24+*/
+		 url('../fonts/samin/samim-bold.woff') format('woff'),  /* ff3.6+, ie9, chrome6+, saf5.1+*/
+		 url('../fonts/samin/samim-bold.ttf') format('truetype');
+}

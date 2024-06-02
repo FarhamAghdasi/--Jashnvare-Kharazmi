@@ -12,7 +12,6 @@ var dezSettingsOptions = {};
 	"use strict"
 	
 	dezSettingsOptions = {
-			typography: "vazirmatn",
 			version: "light",
 			layout: "vertical",
 			primary: "color_1",

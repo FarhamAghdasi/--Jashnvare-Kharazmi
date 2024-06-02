@@ -16,7 +16,7 @@ clearAlerts();
 
 // Disable Console Log
 function disableConsoleLog() {
-    if (disable_consoles_log) {
+    if (DisableConsole) {
         window.console.log = function() {};
     }
 }

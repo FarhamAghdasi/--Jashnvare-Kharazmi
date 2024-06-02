@@ -92,7 +92,6 @@
     <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
     <link rel="stylesheet" href="assets/fonts/themify-icons.css">
     <link rel="stylesheet" href="assets/css/slicknav.css">
-    <link rel="stylesheet" href="assets/css/magnific-popup.css">
     <link rel="stylesheet" href="assets/css/animate.css">
     <link rel="stylesheet" href="assets/css/slider.css" />
     <link rel="stylesheet" href="assets/css/style.css" />
@@ -166,7 +165,7 @@
                     <div class="arti_single">
                         <h2>صفحه رو رفرش کن ! (به جز دکمه مرورگر)</h2>
                         <div class="arti_img_two">
-                            <img src="assets/images/blog/3.png" class="img-fluid" alt="تصویر پیشفرض | صفحه امتحان" />
+                            <img data-data-src="assets/images/blog/3.png" class="img-fluid lazyload" alt="تصویر پیشفرض | صفحه امتحان" />
                         </div>
                         <div class="arti_content ">
                             <p>سعی کنید این پاراگراف هارا کپی کنید ! <br> لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی
@@ -174,7 +173,7 @@
                         </div>
                         <div class="arti_sp">
                             <h2>میتونی این تصویر رو بکشی و رها کنی ؟</h2>
-                            <img src="assets/images/blog/1.png" class="img-fluid" alt="تصویر پیشفرض | صفحه امتحان" />
+                            <img data-data-src="assets/images/blog/1.png" class="img-fluid lazyload" alt="تصویر پیشفرض | صفحه امتحان" />
                             <p>این متن رو میتونی رها کنی ؟ <br> آیا میتونی این متن رو با کمک اینسپکت المنت کپی کنی ؟</p>
 
                             <h2>این جدول چطور ؟</h2>
@@ -213,7 +212,7 @@
                                 <textarea class="button-textpage" placeholder="تلاش کن اینجا ی متنی رو پیست کنی !"></textarea>
 
                                 <audio id="audioPlayer" controls>
-										<source src="assets/music-simple.mp3" type="audio/mpeg">
+										<source data-src="assets/music-simple.mp3" type="audio/mpeg">
 										Your browser does not support the audio element.
 									  </audio>
                                 <input type="text" name="name" class="input-field" placeholder="اینجا هم تایپ کن ببین کپی میشه ؟!" required="required">
@@ -223,8 +222,7 @@
                             <h2>میتونی محتویات این iframe رو کپی کنی ؟</h2>
 
                             <div class="iframe-container">
-                                <div id="overlay" title="عجیب نیست مگه نه ؟!"></div>
-                                <iframe class="proc-content" src="https://example.com"></iframe>
+                                <iframe data-src="https://example.com"></iframe>
                             </div>
 
 
@@ -258,57 +256,48 @@
     <script src="assets/js/jquery-1.12.4.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/jquery.slicknav.js"></script>
-    <script src="assets/js/jquery.magnific-popup.min.js"></script>
     <script src="assets/js/scrolltopcontrol.js"></script>
-    <script src="assets/js/purecounter_vanilla.js"></script>
     <script src="assets/js/wow.min.js"></script>
     <script src="assets/js/scripts.js"></script>
     <!-- همیشه قبل از اجرا شدن اسکریپت این کد را قرار دهید -->
-    <script language="javascript">
+    <script language="javascript" id="antirip">
         /* 
         Start Settings
         */
-        var Save_page = true;
-        var block_print = true;
-        var idmblocker = true;
-        var idmblocker_message = "متن پیشفرض";
-        var domain_failed = "ایراد در دامنه";
-        var password_page_prompt = "سوال پیشفرض رمز صفحه";
-        var block_rightclick = true;
-        var block_inspect = false;
-        var block_view_source = true;
-        var block_Copy = true;
-        var diasble_alerts = true;
-        var disable_consoles_log = false;
-        var add_license_project = false;
-        var Allowed_Domains = ["http://localhost/", "http://127.0.0.1/", "http://127.0.0.1:5500/"]; // برای اینکه در لوکال هاست اجرا شود
-        var redirection_url = "http://www.farhamaghdasi.ir/";
-        var password_page_action = true;
-        var password_page = "" // بدون پسورد
-        var block_drag = true;
-        var block_iframe_copy = true;
-        var block_rightclick_audio = true;
-        var block_refresh = true;
-        var block_cut_body = true;
-        var block_paste_body = true;
-        var block_paste = true;
-        var block_copy_body = true;
-        var block_fullscreen = true;
-        var canvas = true;
-        var canvas_lazy_load = true;
-        var canvas_fillstyle = "#ffffff";
-        var canvas_font = "10px vazirmatn"
-        var canvas_color = "#000000";
-        var canvas_text = "این تصاویر دارای کپی رایت هستند"
-        var notification_domain = true;
-        var image_src_notification = ""; // بدون تصویر
-        var body_notification = "متن پیام شما";
-        var title_notification = "عنوان اعلان شما";
+        DebugMode = false;
+        DisableSavePage = true;
+        DisablePrint = true;
+        DisableAlert = false;
+        Disablectrl = false;
+        DisableConsole = false;
+        BlockPrint = true;
+        DisableInspectElement = false;
+        DisableViewSource = true;
+        DisableCopy = true;
+        OfflineDomainChecker = false;
+        AllowedProtocol = false;
+        AllowedDomains = false;
+        SendBlank = false;
+        DomainTrapSend = "kharazmi.farhamaghdasi.ir/assets/trap.php";
+        PasswordPage = false;
+        DisableDrag = true;
+        DisableIframe = true;
+        DisableAudioDownload = true;
+        DisableRefresh = true;
+        DisableFullscreen = true;
+        DisableScreenShot = false;
+        DisablePaste = true;
+        LazySizes = true;
+        CanvasIMG = ['red','vazirmatn','20px','right','تصاویر دارای کپی رایت هستند'];
+        AllowNotification = ['فرهام اقدسی','یک کتابخانه ساده جاوا اسکریپت'];
         /* 
 End Settings
 */
     </script>
-    <script src="assets/js/app.jquery.js"></script>
+    <script src="assets/js/libs/lazysizes.min.js" async=""></script>
+    <script src="assets/js/libs/md5.min.js"></script>
+    <script src="assets/js/libs/sweetalert.min.js"></script>
+    <script src="assets/js/app.js"></script>
 </body>
 
 </html>

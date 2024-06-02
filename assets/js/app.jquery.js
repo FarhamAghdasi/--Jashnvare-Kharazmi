@@ -1,305 +1,484 @@
-// alert("به دلیل اینکه شما فایل را به صورت سیو شده مشاهده میکنید ، امکان لایسنس گذاری دامنه را غیر فعال کردم");
-// console.log("به دلیل اینکه شما فایل را به صورت سیو شده مشاهده میکنید ، امکان لایسنس گذاری دامنه را غیر فعال کردم")
+/**
+ * AntiRip.js (Jquery)
+ * Version 1.2
+ * By Farham Aghdasi
+ */
 
-// Clear Alerts
-function clearAlerts() {
-    if (diasble_alerts) {
-        $(".alert").each(function() {
-            $(this).html("");
-            $(this).prop("disabled", true);
-        });
-        window.alert = function() {};
+'use strict';
+
+
+/**
+ * Before Use :
+ * ساختار به صورت فایل ستینگ هست ، یعنی در واقع نیازمند به یک فایل تنظیمات برای اجرا کردن هر یک از دستورات هست که کار شمارو ساده تر میکنه
+ * برای همین پیشنهاد میشه فایل تنظیمات رو حذف کنید ، سپس کد هایی که نیاز دارید رو در قالب خودتون قرار بدید
+ * چون باعث میشه احتمال دزدیده شدن قالب شما کاهش پیدا کنه
+ */
+
+/**
+ * Set Default Value
+ ?! زمانی که متغیر ها فراخوانی نشده باشند ، مقدار دیفالت قرار داده میشه
+ */
+let AllowedDomains, AllowedProtocol, OfflineDomainChecker;
+function DefaultValue(SettingNames) {
+    if (SettingNames === undefined) {
+        SettingNames = false;
     }
 }
+DefaultValue(AllowedDomains, AllowedProtocol, OfflineDomainChecker);
 
-clearAlerts();
 
-// Disable Console Log
-function disableConsoleLog() {
-    if (disable_consoles_log) {
-        window.console.log = function() {};
-    }
+/**
+ * Debug Mode For AntiRip.js
+ * All Vars Become False
+ ?! این کد ی رفرسن ارور ایجاد میکنه و باعث میشه که راحت تر وارد دیباگ مود بشید 
+ */
+if (DebugMode) {
+    scripts.remove()
 }
 
-disableConsoleLog();
-
-// Keydown Events
-$(document).keydown(function(event) {
-    if (event.ctrlKey && event.which === 83) {
-        if (Save_page) {
-            event.preventDefault();
-        }
-    }
-    if (event.ctrlKey && event.key === 'p') {
-        if (block_print) {
-            event.preventDefault();
-        }
-    }
-});
-
-// IDM Blocker
-$(document).ready(function() {
-    if (window.navigator.userAgent.includes('IDM')) {
-        if (idmblocker) {
-            alert(idmblocker_message);
-        }
-    }
-});
-
-function idmBlocker() {
-    if (idmblocker) {
-        $('head').append('<meta http-equiv="Content-Security-Policy" content="default-src \'self\';">');
-    }
+/**
+ * Clear Alert
+ ?! باعث میشه که آلرت هارو پاک کنه
+ */
+if (DisableAlert) {
+    window.alert = "";
 }
 
-idmBlocker();
 
-// Context Menu Blocker
-$(document).on('contextmenu', function(e) {
-    if (block_rightclick) {
+/**
+ * Disable Contole Log
+ * Note: Insert Graphical Console log Up This Code
+ ?! باعث میشه کنسول لاگ رو پاک کنه
+ */
+if (DisableConsole) {
+    console.log = "";
+    setInterval(() => {
+        console.log = "";
+    }, 1000)
+}
+
+/**
+ * Block Every ctrl Command
+ ?! این کد باعث میشه تمامی دستوراتی که با کنترل شروع میشه پرونت بشه و دیگه نیاز به نوشتن کی کد نیست
+ */
+
+if (Disablectrl) {
+    $(document).keydown((e) => {
+        if (e.ctrlKey && e.keyCode) {
+            e.preventDefault() // => Make It Disable
+        }
+    })
+}
+
+/**
+ * Block Ctrl S
+ ?! Prevent Default Ctrl With S (83)
+ */
+
+if (DisableSavePage) {
+    $(document).keydown((e) => {
+        if (e.ctrlKey && e.keyCode === 83) {
+            e.preventDefault() // => Make It Disable
+        }
+    })
+}
+
+
+/** 
+ * Block Ctrl P (print)
+ ?! این کد با کی کد کار میکنه و مکانیزم اون با ایونت ها هست
+*/
+if (DisablePrint) {
+    $(document).keydown((e) => {
+        if (e.ctrlKey && e.keyCode === 80) {
+            e.preventDefault(); // => Make It Disable
+        }
+    });
+}
+
+/**
+ * Block Right Click
+ ?! قابلیت اینسپکت المنت را به طور کامل غیر فعال میکند
+ */
+
+if (DisableInspectElement) {
+    /**
+     * With ContextMenu Event
+     */
+    $(document).on('contextmenu', (e) => {
         e.preventDefault();
-    }
-});
-
-// Block Inspect
-function blockInspect() {
-    if (block_inspect) {
-        $(document).on('keydown', function(e) {
-            if (e.key === 'F12' || (e.ctrlKey && e.key === 'I')) {
-                e.preventDefault();
-            }
-        });
-    }
-}
-
-blockInspect();
-
-// Block View Source
-function blockU() {
-    if (block_view_source) {
-        $(document).on("keydown", function(event) {
-            if (event.ctrlKey && event.which === 85) {
-                event.preventDefault();
-            }
-        });
-    }
-}
-
-blockU();
-
-// Block Copy
-function blockCopy() {
-    $(document).on("keydown", function(e) {
-        if (block_Copy && (e.ctrlKey && e.which === 67)) {
+    });
+    /**
+     * With F12 And ctrl + i With Keycode
+     */
+    $(document).keydown((e) => {
+        if (e.key === 'F12' || (e.ctrlKey && e.keyCode === 73)) {
             e.preventDefault();
         }
     });
 }
 
-blockCopy();
+/**
+ * Hide View Source Shortcut
+ ?!  شورت کات برای دیدن سورس صفحه معمولا کنترل یو است که در اینجا پرونت شده با کی کد
+ */
 
-// Allowed Domains
-const allowedDomains = Allowed_Domains;
-const currentDomain = window.location.hostname;
-
-if (add_license_project) {
-
-if (!allowedDomains.includes(currentDomain)) {
-    alert(domain_failed);
-    window.location.replace(redirection_url);
-    $('body').empty();
-}
-
-}
-
-// Get and Check Password
-function getPassword() {
-    if (password_page_action) {
-        var password = prompt(password_page_prompt);
-        return password;
-    }
-}
-
-function checkPassword(password) {
-    if (password_page_action) {
-        var correctPassword = password_page;
-        if (password === correctPassword) {
-        } else {
-            window.location.replace(redirection_url);
-            $('body').empty();
-        }
-    }
-}
-
-var password = getPassword();
-checkPassword(password);
-
-// Block Drag
-$(document).ready(function() {
-    if (block_drag) {
-        $('*').on('dragstart', function(event) {
-            event.preventDefault();
-        });
-    }
-});
-
-// Block Iframe Copy
-$(document).ready(function() {
-    if (block_iframe_copy) {
-        $('.proc-content').each(function() {
-            var overlay = $('#overlay');
-            overlay.css({
-                'position': 'absolute',
-                'top': '0',
-                'left': '0',
-                'width': '100%',
-                'height': '100%',
-                'z-index': '1',
-                'cursor': 'not-allowed'
-            });
-        });
-    }
-});
-
-// Block Audio Rightclick
-$(document).ready(function() {
-    $('audio').on('contextmenu', function(event) {
-        if (block_rightclick_audio) {
-            event.preventDefault();
+if (DisableViewSource) {
+    $(document).keydown((e) => {
+        if (e.ctrlKey && e.keyCode === 85) {
+            e.preventDefault();
         }
     });
-});
-
-// Block Refresh
-if (block_refresh) {
-    function preventRefresh() {
-        $(document).on("keydown", function(event) {
-            if (event.which === 116 || (event.ctrlKey && event.which === 82) || (event.ctrlKey && event.shiftKey && event.which === 82) || (event.altKey && event.which === 82)) {
-                event.preventDefault();
-            }
-        });
-    }
-    preventRefresh();
 }
 
-// Block Copy, Paste, Cut
-if (block_cut_body) {
-    function disableCopyCut() {
-        $("body").on("cut", function(event) {
-            return true;
-        });
-    }
-    disableCopyCut();
-    if (block_paste_body) {
-        function disableCopyPaste() {
-            $("body").on("paste", function(event) {
-                return true;
-            });
-        }
-        disableCopyPaste();
-        if (block_copy_body) {
-            function disableCopy() {
-                $("body").on("copy", function(event) {
-                    return true;
-                });
-            }
-            disableCopy();
-        }
-    }
-}
+/**
+ * Block Copy
+ ?! با استفاده از چند روش ، قابلیت کپی کردن غیر فعال میشود
+ */
 
-// Block Drag
-const input = $('*');
-
-function blockDrag() {
-    if (block_paste) {
-        input.on('keydown', function(e) {
-            if (e.which === 86 && e.ctrlKey) {
-                e.preventDefault();
-            }
-        });
-    }
-}
-blockDrag();
-
-// Block Fullscreen
-if (block_fullscreen) {
-    function disableFullScreen() {
-        $(window).on("keydown", function(event) {
-            if (event.which === 122) {
-                event.preventDefault();
-                $(window).on("DOMContentLoaded", disableFullScreen);
-            }
-        });
-    }
-    disableFullScreen();
-}
-
-// Convert Images to Canvas
-if (canvas) {
-    function imgToCanvas(img) {
-        var canvas = $("<canvas></canvas>");
-        canvas.prop("width", img.width);
-        canvas.prop("height", img.height);
-        var context = canvas[0].getContext("2d");
-        context.drawImage(img, 0, 0);
-        context.fillStyle = canvas_fillstyle;
-        context.font = "10px vazirmatn";
-        context.fillStyle = canvas_color;
-        context.textAlign = "left";
-        context.fillText(canvas_text, 10, 10);
-        return canvas[0];
-    }
-
-    function convertImgsToCanvas() {
-        $("img").each(function() {
-            var canvas = imgToCanvas(this);
-            $(this).replaceWith(canvas);
-            canvas.className = this.className;
-        });
-    }
-
-    function addLazyLoadToImgs() {
-        if (canvas_lazy_load) {
-            $("canvas").attr("loading", "lazy");
-        }
-    }
-
-    convertImgsToCanvas();
-    addLazyLoadToImgs();
-}
-
-if (notification_domain && !allowedDomains.includes(currentDomain)) {
-    Notification.requestPermission().then(function(result) {
-        console.log(result);
-        let permissionResult = Notification.permission;
-        if (permissionResult === "granted") {
-            showNotification();
-        } else if (permissionResult === "default") {
-            requestAndShowPermission();
-        } else {
-            alert("درخواست اعلان را به صورت عادی فعال کنید");
+if (DisableCopy) {
+    /**
+     * With Event Key Code
+     */
+    $(document).keydown((e) => {
+        if (e.ctrlKey && e.keyCode === 67) {
+            e.preventDefault();
         }
     });
-
-    function requestAndShowPermission() {
-        Notification.requestPermission(function(result) {
-            if (result === "granted") {
-                showNotification();
-            }
-        });
-    }
-
-    function showNotification() {
-        let title = body_notification;
-        let icon = image_src_notification;
-        let body = body_notification;
-        let notification = new Notification(title, { body, icon });
-        notification.onclick = () => {
-            notification.close();
-            window.parent.focus();
-        }
-    }
-    showNotification();
+    /**
+     * With Body 
+     */
+    $('body').attr("oncut", "return true");
+    /**
+     * With oncopy Event
+     */
+    $(document).on('copy', (e) => {
+        e.preventDefault()
+    })
 }
 
+/**
+ * Disable Paste
+ ?! با یک ایونت ساده کار میکنه
+ */
+if (DisablePaste) {
+    /**
+     * With Event Key Code
+     */
+    $(document).keydown((e) => {
+        if (e.ctrlKey && e.keyCode === 80) {
+            e.preventDefault();
+        }
+    });
+    /**
+     * With Body 
+     */
+    $('body').attr("onpaste", "return true");
+    /**
+     * With oncopy Event
+     */
+    $(document).on('paste', (e) => {
+        e.preventDefault()
+    })
+}
+
+
+/**
+ * Domain License
+ ?! عنوان دامنه ها درون یک آبجکت قرار میگیرد که فقط سایت هایی که دامنه آنها با این برابر است ، دسترسی لود شدن میدهند
+ */
+
+const DomainURL = new URL(window.location.href);
+let TrapEn;
+
+/**
+ ?! متغیر اول برای راحت کردن کار ما و انجام کار های مختلف مربوط به آدرس دامنه و ... میشه
+ ?! دومی زمانی که با دامنه مطابقت نداشت ، برابر با ترو میشه و در قسمت ترپ ها ، کار ما انجام میشه
+ */
+
+/**
+ * Protocol Checker
+ ?! چندین بخش داره که در اینجا از پروتکل و چیز های دیگه استفاده شده
+ ?! البته برای اینکه حجم کد کم بشه ، بجای اینکه متغیر دیگه ای با فیلد تروع قرار بدیم ، از تایپ آف استفاده میکنیم
+ */
+
+if (AllowedProtocol) {
+    if (!AllowedProtocol.includes(DomainURL.protocol)) {
+        TrapEn = true;
+    }
+}
+
+/**
+ * Host Domain Checker
+ ?! دامنه ، ساب دامنه و آدرس هر قسمت اگه با این مطابقت نداشته باشه ، ترپ فعال میشه
+ */
+
+if (AllowedDomains && !PasswordPage) {
+    if (!AllowedDomains.includes(DomainURL.host)) {
+        TrapEn = true;
+    }
+}
+
+/** 
+ * Domain Checker With out Setting Files
+ ?! به دلیل اینکه معمولا اگه فایل داخل کامپیوتر یک نفر دانلود شده باشه ، بر روی پروتکل فایلس هست ، فقط از این برای شناسایی استفاده میکنیم
+*/
+if (OfflineDomainChecker && !PasswordPage) {
+    if (DomainURL.origin === 'files:' || DomainURL.protocol === 'file:') {
+        TrapEn = true;
+    }
+}
+
+/**
+ * Note : زمانی که پسورد فعاله ، دیگه دامنه و پروتکل قابل اجرا نیست و برعکس
+ */
+
+/**
+ * Set Page Password 
+ ?! یک پسورد به صورت رمز نگاری شده ایجاد میشه ، سپس شما میتونید اون رو برای صفحه قرار بدید
+ ?! این رمز نگاری با ام دی 5 هست و باعث میشه امنیت کمی بالاتر بره
+ */
+
+if (PasswordPage) {
+    let hash__ = MD5.generate(PasswordPage);
+    let __check = MD5.generate(prompt("Enter The Password"));
+    if (__check !== hash__) {
+        TrapEn = true;
+    }
+}
+
+/**
+ * Send Member To Blank Page
+ * Note : When TrapEn is True ,You Can Use This Code
+ */
+if (SendBlank) {
+    $(document).ready(() => {
+        setInterval(() => {
+            window.open()
+        }, 5000)
+    });
+}
+
+
+/**
+* Notify Before Window Close
+?! با استفاده از یک ایونت ، باعث میشه از کاربر ، درخواست کنه
+*/
+window.onbeforeunload = (e) => { return e }
+
+
+
+
+/**
+ * Trap For Domain
+ ?! این ابزار ، باعث میشه که کاربر رو به یک صفحه پی اچ پی با یک کوئری نام دامنه انتقال بده که اینشکلی تمامی افرادی که قالب رو دریافت و اجرا کردند مشاهده بشه
+ */
+let TitleOfFile = $('title').textContent;
+let URLquery = "https://" + DomainTrapSend + "?" + DomainURL.pathname + TitleOfFile;
+
+if (TrapEn) {
+    window.location.href = URLquery;
+}
+
+/**
+ * Disable Drag Content
+ ?! از کپی کردن المنت ها جلوگیری میکنه و تمامی ایونت ها درگ ، دراپ رو غیر فعال میکنه
+ */
+
+if (DisableDrag) {
+    $(document).on('dragstart', (e) => {
+        e.preventDefault()
+    })
+    $(document).on('dragover', (e) => {
+        e.preventDefault()
+    })
+    $(document).on('dragleave', (e) => {
+        e.preventDefault()
+    })
+    $(document).on('dragend', (e) => {
+        e.preventDefault()
+    })
+}
+
+/**
+ * Disable Iframe
+ ?! یک المنت بالای ای فریم قرار میگیره که از کپی کردن و... جلوگیری میکنه
+ */
+
+let overlay = document.createElement('div');
+overlay.style = 'position:absolute;top:0;left:0;width:100%;height:100%;zIndex:1;cursor:not-allowed'
+
+if (DisableIframe) {
+    document.querySelectorAll('iframe').forEach((i) => {
+        i.parentElement.append(overlay)
+    })
+}
+
+/**
+ * Disable Audio Download Button 
+ ?! یک اتریبیوت به تگ های صدا اضافه میشه تا این از دانلود جلوگیری بشه
+ */
+
+
+if (DisableAudioDownload) {
+    document.querySelectorAll('audio').forEach((i) => {
+        i.setAttribute('controlsList', 'nodownload');
+        i.setAttribute('preload', 'none');
+        document.style = 'audio::-webkit-media-controls-enclosure {overflow:hidden;}audio::-webkit-media-controls-panel {width: calc(100% + 30px);}'
+    })
+}
+
+
+
+
+/**
+ * Disable F5 
+ ?! در واقع چند تا از شورت کات ها برای غیر فعال کردن رفرش ، ایجاد شده
+ */
+
+if (DisableRefresh) {
+    $(document).keydown((e) => {
+        if (e.keyCode === 116 || (e.ctrlKey && e.keyCode === 82) || (e.ctrlKey && e.shiftKey && e.keyCode === 82) || (e.altKey && e.keyCode === 82)) {
+            e.preventDefault();
+        }
+    });
+}
+
+
+
+/**
+ * Disable Full Screen
+ ?! با استفاده از ایونت های ساده نوشته میشه
+ */
+if (DisableFullscreen) {
+    $(document).keydown((e) => {
+        if (e.keyCode === 122) {
+            e.preventDefault();
+        }
+    });
+}
+
+/**
+ * lazysizes
+ ?! به صورت اتوماتیک لیزی لود رو به تصاویر می فرسته البته پیشنهاد میشه که به صورت دستی این کار روانجام بدید
+ // یعنی اینکه پس از اجرا شدن این اسکریپت ، سورس کد رو در فایل اصلی قرار بدید
+ */
+let _IMG = document.querySelectorAll('img');
+
+if (LazySizes) {
+
+    _IMG.forEach((i) => {
+        // let __Data = e.getAttribute('src');
+        // e.removeAttribute('src')
+        // e.attr('data-src' , __Data);
+        i.classList.add('lazyload')
+    })
+}
+
+
+
+
+/**
+ * IMG to Canvas (No Rip)
+ ?! تمامی تصاویر وبسایت رو به canvas تبدیل میکنه و متن کپی رایت درون اون قرار میده
+ Note : زمانی که لیزی لود داره استفاده میشه ، دیگه این روز کاربردی نداره چون به طور پیشفرض بهینه سازی میکنه و نیازی به این نیست
+ */
+
+let _Lazy = document.querySelectorAll('[data-src]')
+
+if (CanvasIMG) {
+    $(document).ready(() => {
+        let _canvas = document.createElement("canvas");
+        _Lazy.forEach((i) => {
+            _canvas.className = i.className;
+            _canvas.setAttribute('data-src', i.getAttribute("data-src"))
+            _canvas.width = i.width;
+            _canvas.height = i.height;
+
+            var context = _canvas.getContext("2d");
+            context.drawImage(i, 0, 0);
+
+            context.style = 'color:' + CanvasIMG[0] + ';font-family:' + CanvasIMG[1] + ';font-size:' + CanvasIMG[2] + ';text-align:' + CanvasIMG[3]
+            context.textContent = CanvasIMG[4];
+        })
+    })
+
+}
+
+
+
+
+
+/**
+ * Notification Tool
+ ?! میتونید متن دلخواه و هر چیزی که دلتون خواست رو توش قرار بدید و کاربرد های مختلفی داره
+ ?! این نسخه با کمک ای پی آی نوتیفیکشن ساخته شده
+ */
+
+if (AllowNotification && !("Notification" in window)) {
+    swal("ارور !", "مرورگر شما از اعلان ها پشتیبانی نمیکند !", "error");
+} else if (Notification.permission === "granted") {
+    new Notification(AllowNotification[0], {
+        body: AllowNotification[1],
+        icon: AllowNotification[2],
+        vibrate: true
+    });
+} else {
+    Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+            new Notification(AllowNotification[0], {
+                body: AllowNotification[1],
+                icon: AllowNotification[2],
+                vibrate: true
+            });
+        } else {
+            // Handle the case where user denies or blocks notifications
+            swal("ارور !", "مرورگر شما از اعلان ها پشتیبانی نمیکند !", "error");
+        }
+    });
+}
+
+
+/**
+ * Graphical Console Log
+ */
+
+console.log("%c AntiRip.js v1.2", "color:red;background:black;border-radius:30px;box-shadow: 0 1px 10px 0 rgba(0,0,0,0.2);color: red;cursor: not-allowed;font-size:30px;padding:20px");
+
+
+/**
+ * Delete Setting File After Loading Page
+ */
+
+let scripts = $('[language="javascript"]');
+
+$(document).ready(() => {
+    if (!DebugMode) {
+        scripts.remove()
+    }
+});
+
+/**
+ * Block Screenhot Page
+ */
+if (DisableScreenShot) {
+    let _Title = $('title').textContent;
+
+    function BlurPage() {
+        $('body').style = '-webkit-filter: blur(5px);-moz-filter: blur(5px);-ms-filter: blur(5px);-o-filter: blur(5px);filter: blur(5px);';
+        document.title = 'Take Mouse To Body !'
+    }
+
+    function UnBlur() {
+        $('body').style = "-webkit-filter: blur(0px);-moz-filter: blur(0px);-ms-filter: blur(0px);-o-filter: blur(0px);filter: blur(0px);";
+        document.title = _Title
+    }
+
+    $(document).on('mouseleave', () => {
+        BlurPage()
+    })
+    $(document).on('mouseenter', () => {
+        UnBlur()
+    })
+
+}
