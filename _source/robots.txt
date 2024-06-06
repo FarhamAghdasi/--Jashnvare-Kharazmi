@@ -1,0 +1,99 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /cgi-bin/
+Disallow: /tmp/
+Disallow: /private/
+Disallow: /secret/
+
+# Prevent access to specific file types
+Disallow: /*.php$
+Disallow: /*.asp$
+Disallow: /*.aspx$
+Disallow: /*.cgi$
+Disallow: /*.pl$
+Disallow: /*.txt$
+Disallow: /*.log$
+
+# Block specific web crawlers and user agents
+User-agent: HTTrack
+Disallow: /
+User-agent: WebCopier
+Disallow: /
+User-agent: Teleport
+Disallow: /
+User-agent: WebStripper
+Disallow: /
+User-agent: WebReaper
+Disallow: /
+User-agent: WebWhacker
+Disallow: /
+User-agent: WebZIP
+Disallow: /
+User-agent: Wget
+Disallow: /
+User-agent: BlackWidow
+Disallow: /
+User-agent: Go!Zilla
+Disallow: /
+User-agent: Download Demon
+Disallow: /
+User-agent: EmailSiphon
+Disallow: /
+User-agent: EmailWolf
+Disallow: /
+User-agent: ExtractorPro
+Disallow: /
+User-agent: FlashGet
+Disallow: /
+User-agent: GetRight
+Disallow: /
+User-agent: Go-Ahead-Got-It
+Disallow: /
+User-agent: GrabNet
+Disallow: /
+User-agent: Grafula
+Disallow: /
+User-agent: HMView
+Disallow: /
+User-agent: Internet Ninja
+Disallow: /
+User-agent: JetCar
+Disallow: /
+User-agent: MIDown tool
+Disallow: /
+User-agent: Mister PiX
+Disallow: /
+User-agent: NetAnts
+Disallow: /
+User-agent: NetSpider
+Disallow: /
+User-agent: Octopus
+Disallow: /
+User-agent: pBots
+Disallow: /
+User-agent: Website Quester
+Disallow: /
+User-agent: WebSauger
+Disallow: /
+User-agent: IDM
+Disallow: /
+User-agent: PhantomJS
+Disallow: /
+
+# Prevent all web crawlers from indexing certain file types
+User-agent: *
+Disallow: /*.zip$
+Disallow: /*.exe$
+Disallow: /*.tar$
+Disallow: /*.gz$
+Disallow: /*.rar$
+Disallow: /*.7z$
+Disallow: /*.bin$
+Disallow: /*.dat$
+Disallow: /*.bak$
+
+# Prevent access to specific folders (example)
+User-agent: *
+Disallow: /backup/
+Disallow: /old/
+Disallow: /files/

@@ -1,3 +1,7 @@
+<?php
+require 'assets/php/check.php'
+    ?>
+
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 
@@ -10,9 +14,12 @@
     <meta name="google-site-verification" content="#" />
     <!-- به دلیل عدم داشتن محتوای ارزشمند این صفحه no index کردم -->
     <meta name='robots' content='noindex, follow' />
-    <meta name="description" content="کریستینو قالب نمونه کارها شخصی واکنشگرا است. این یک قالب شخصی مدرن، خلاق، تمیز، حرفه ای و جذاب است. کریستینو به طور کامل با آخرین نسخه بوت استرپ نسخه 5.3.0 به روز شده است. کریستینو آنتی ریپ ، یک کتابخانه ساده در این حال قدرتمند برای محافظت از وبسایت شما در مقابل ریپر ها و دانلود شدن محتوای وبسایت شما می باشد که میتوانید به راحتی از این حملات ایمن باشید">
-    <meta property="og:description" content="کریستینو قالب نمونه کارها شخصی واکنشگرا است. این یک قالب شخصی مدرن، خلاق، تمیز، حرفه ای و جذاب است. کریستینو به طور کامل با آخرین نسخه بوت استرپ نسخه 5.3.0 به روز شده است. کریستینو آنتی ریپ ، یک کتابخانه ساده در این حال قدرتمند برای محافظت از وبسایت شما در مقابل ریپر ها و دانلود شدن محتوای وبسایت شما می باشد که میتوانید به راحتی از این حملات ایمن باشید">
-    <meta property="twitter:description" content="کریستینو قالب نمونه کارها شخصی واکنشگرا است. این یک قالب شخصی مدرن، خلاق، تمیز، حرفه ای و جذاب است. کریستینو به طور کامل با آخرین نسخه بوت استرپ نسخه 5.3.0 به روز شده است. کریستینو آنتی ریپ ، یک کتابخانه ساده در این حال قدرتمند برای محافظت از وبسایت شما در مقابل ریپر ها و دانلود شدن محتوای وبسایت شما می باشد که میتوانید به راحتی از این حملات ایمن باشید">
+    <meta name="description"
+        content="کریستینو قالب نمونه کارها شخصی واکنشگرا است. این یک قالب شخصی مدرن، خلاق، تمیز، حرفه ای و جذاب است. کریستینو به طور کامل با آخرین نسخه بوت استرپ نسخه 5.3.0 به روز شده است. کریستینو آنتی ریپ ، یک کتابخانه ساده در این حال قدرتمند برای محافظت از وبسایت شما در مقابل ریپر ها و دانلود شدن محتوای وبسایت شما می باشد که میتوانید به راحتی از این حملات ایمن باشید">
+    <meta property="og:description"
+        content="کریستینو قالب نمونه کارها شخصی واکنشگرا است. این یک قالب شخصی مدرن، خلاق، تمیز، حرفه ای و جذاب است. کریستینو به طور کامل با آخرین نسخه بوت استرپ نسخه 5.3.0 به روز شده است. کریستینو آنتی ریپ ، یک کتابخانه ساده در این حال قدرتمند برای محافظت از وبسایت شما در مقابل ریپر ها و دانلود شدن محتوای وبسایت شما می باشد که میتوانید به راحتی از این حملات ایمن باشید">
+    <meta property="twitter:description"
+        content="کریستینو قالب نمونه کارها شخصی واکنشگرا است. این یک قالب شخصی مدرن، خلاق، تمیز، حرفه ای و جذاب است. کریستینو به طور کامل با آخرین نسخه بوت استرپ نسخه 5.3.0 به روز شده است. کریستینو آنتی ریپ ، یک کتابخانه ساده در این حال قدرتمند برای محافظت از وبسایت شما در مقابل ریپر ها و دانلود شدن محتوای وبسایت شما می باشد که میتوانید به راحتی از این حملات ایمن باشید">
     <link rel="canonical" href="https://kharazmi.farhamaghdasi.ir/">
     <meta property="author" content="فرهام اقدسی | کتابخانه آنتی ریپ HTML | جشنواره خوارزمی">
     <meta name="twitter:site" content="@jashnavre_kharazmi_farhamaghdasi">
@@ -115,10 +122,12 @@
                         <nav id="main-menu" class="ms-auto">
                             <ul>
                                 <li><a class="nav-link" href="index.html">خانه</a></li>
-                                <li><a class="nav-link" href="https://www.farhamaghdasi.ir/" target="_blank">درباره فرهام اقدسی</a></li>
+                                <li><a class="nav-link" href="https://www.farhamaghdasi.ir/" target="_blank">درباره
+                                        فرهام اقدسی</a></li>
 
                                 <li><a class="nav-link" href="test-page.html">تست محیط آنتی ریپ</a></li>
-                                <li><a class="nav-link" href="https://kharazmi.farhamaghdasi.ir/">مشاهده در وبسایت</a></li>
+                                <li><a class="nav-link" href="https://kharazmi.farhamaghdasi.ir/">مشاهده در وبسایت</a>
+                                </li>
                             </ul>
                         </nav>
                         <div id="mobile_menu"></div>
@@ -126,7 +135,7 @@
                 </div>
                 <div class="col-lg-4 col-md-6 col-sm-8">
                     <div class="call_to_action">
-                        <a class="btn_one" href="login.html">ورود</a>
+                        <a class="btn_one" href="login.php">ورود</a>
                         <a class="btn_two" href="#">ثبت نام</a>
                     </div>
                 </div>
@@ -137,7 +146,8 @@
     <section class="section-top">
         <div class="container">
             <div class="col-lg-10 offset-lg-1 text-center">
-                <div class="section-top-title wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.3s" data-wow-offset="0">
+                <div class="section-top-title wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.3s"
+                    data-wow-offset="0">
                     <h1>ثبت نام</h1>
                     <ul>
                         <li><a href="index.html">خانه</a></li>
@@ -158,49 +168,67 @@
                         <form id="register-form" action="" method="post" role="form">
                             <div class="form-group">
                                 <label>نام</label>
-                                <span id="first-name-info"></span> <input type="text" name="first-name" id="first-name" class="input-field" value="">
+                                <span id="first-name-info"></span> <input type="text" name="first-name" id="first-name"
+                                    class="input-field" value="">
                             </div>
                             <div class="form-group">
                                 <label>نام خانوادگی</label>
-                                <span id="last-name-info"></span> <input type="text" name="last-name" id="last-name" class="input-field" value="">
+                                <span id="last-name-info"></span> <input type="text" name="last-name" id="last-name"
+                                    class="input-field" value="">
                             </div>
                             <div class="form-group">
                                 <label>ایمیل</label>
-                                <span id="register-email-info"></span> <input type="email" name="register-email-id" id="register-email-id" class="input-field" value="">
+                                <span id="register-email-info"></span> <input type="email" name="register-email-id"
+                                    id="register-email-id" class="input-field" value="">
                             </div>
                             <div class="form-group">
                                 <label>شماره تماس</label>
-                                <span id="contact-no-info"></span> <input type="text" name="contact-number" id="contact-number" maxlength="10" class="input-field">
+                                <span id="contact-no-info"></span> <input type="text" name="contact-number"
+                                    id="contact-number" maxlength="10" class="input-field">
                             </div>
                             <div class="form-group">
                                 <label>رمز عبور</label>
                                 <span id="register-passwd-info"></span>
                                 <div class="password-field">
-                                    <span id="register-passwd-info"></span><input type="password" name="register-password" id="register-password" class="input-field"> <i class="fa fa-eye" id="togglePassword"></i>
+                                    <span id="register-passwd-info"></span><input type="password"
+                                        name="register-password" id="register-password" class="input-field"> <i
+                                        class="fa fa-eye" id="togglePassword"></i>
                                 </div>
                                 <div class="form-group">
                                     <label>تکرار رمز عبور</label>
                                     <span id="confirm-passwd-info"></span>
                                     <div class="password-field">
-                                        <span id="register-passwd-info"></span><input type="password" name="confirm-password" id="confirm-password" class="input-field"><i class="fa fa-eye" id="togglePassword"></i>
+                                        <span id="register-passwd-info"></span><input type="password"
+                                            name="confirm-password" id="confirm-password" class="input-field"><i
+                                            class="fa fa-eye" id="togglePassword"></i>
+                                    </div>
+                                    <div class="form-group">
+                                        <img src="assets/php/captcha.php" id="captcha-image">
+                                        <i class="fa fa-refresh" aria-hidden="true"></i>
+                                        <span id="captcha-info"></span>
+                                        <input type="text" name="captcha" id="captcha" class="input-field"
+                                            placeholder="">
+
                                     </div>
                                     <div class="form-group col-lg-12">
-                                        <a type="button" id="submit-btn" class="btn_one registrationbutton text-center">ثبت نام</a>
+                                        <a type="button" id="submit-btn"
+                                            class="btn_one registrationbutton text-center">ثبت نام</a>
                                     </div>
 
                         </form>
-                        <p>آیا اکانت دیگری دارید ؟ <a href="login.html">وارد شوید </a></p>
-                        </div>
-                        </div>
+                        <p>آیا اکانت دیگری دارید ؟ <a href="login.php">وارد شوید </a></p>
                     </div>
                 </div>
+            </div>
+        </div>
     </section>
 
     <div class="footer section-padding-no section-padding">
         <div class="container">
             <div class="row fc">
                 <div class="footer_copyright">
-                    <p>&copy; تمامی حقوق محفوظ است <br> طراحی شده توسط <a class="no-d" href="https://www.farhamaghdasi.ir/" target="_blank">فرهام اقدسی</a></p>
+                    <p>&copy; تمامی حقوق محفوظ است <br> طراحی شده توسط <a class="no-d"
+                            href="https://www.farhamaghdasi.ir/" target="_blank">فرهام اقدسی</a></p>
                 </div>
             </div>
         </div>
@@ -209,10 +237,9 @@
     <script src="assets/js/jquery-1.12.4.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/jquery.slicknav.js"></script>
-    <script src="assets/js/scrolltopcontrol.js"></script> 
+    <script src="assets/js/scrolltopcontrol.js"></script>
     <script src="assets/js/wow.min.js"></script>
     <script src="assets/js/libs/sweetalert.min.js"></script>
-    <script src="assets/js/ajax.js"></script>
     <script src="assets/js/scripts.js"></script>
 </body>
 

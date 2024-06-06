@@ -1,0 +1,23 @@
+===== نصب جدید =====
+نام دیتابیس: form_php
+پایگاه داده form_php با موفقیت ساخته شد.
+دستور SQL با موفقیت اجرا شد.
+ایمیل و رمز عبور با موفقیت اضافه شد.
+===== نصب جدید =====
+نام دیتابیس: form_php
+پایگاه داده form_php با موفقیت ساخته شد.
+دستور SQL با موفقیت اجرا شد.
+ایمیل و رمز عبور با موفقیت اضافه شد.
+
+
+1) Added Setting Antirip And Change Profile Data 2) Update Panel 3) Update Login And Register System 4) Update Installer And Added New Options 5) Added Admin Member In Panel (For View Mysql Tabels)
+
+        toastr.options.progressBar = true;
+        toastr.options.closeButton = true;
+        toastr.options.newestOnTop = false;
+        toastr.options.positionClass = "toast-top-right";
+        toastr.options.preventDuplicates = true;
+        toastr.options.hideMethod = "fadeOut";
+        toastr.options.showMethod = "fadeOut";
+        toastr.options.showEasing = "linear";
+        toastr.options.extendedTimeOut = 1000;

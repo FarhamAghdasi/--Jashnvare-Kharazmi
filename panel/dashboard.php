@@ -1,26 +1,5 @@
 <?php
-// اینجا زمانی که کاربر لاگین کرد ، میاد اون اطلاعات رو دریافت میکنه به صورت json / ajax
-session_start();
-
-// اول از همه برسی میکنه که کاربر لاگین کرد یا نه
-if (!isset($_SESSION['email']) || empty($_SESSION['email'])) {
-    // سپس با استفاده از header میاد به صفحه لاگین ریداکت میکنه
-    // یکی از مشکلاتی که من داشتم ریداکت کردن صفحات بود . به خاطر اینکه به صورت ajax ساخته بودم فرم لاگین و ثبت نام و فراموشی رمز رو ، نمیتونستم از header استفاده کنم و به این دلیل که توی یک صفحه قرار داره ، اینجا میشه استفاده کرد
-    header("Location: ../login.html");
-    exit();
-}
-
-// اول از همه میاد برسی میکنه مقادیر ایمیل و نام و نام خانوادگی رو
-if (isset($_SESSION['email']) && !empty($_SESSION['email'])) {
-    $email = $_SESSION['email'];
-    $first_name = $_SESSION['first_name'];
-    $last_name = $_SESSION['last_name'];
-} else {
-    // اگه اطلاعاتی دریافت نشد یا خالی بود ، به صورت نامشخص ارسال میکنه
-    $email = "آدرس ایمیل نامشخص";
-    $first_name = "نام نامشخص";
-    $last_name = "نام خانوادگی نامشخص";
-}
+require 'php/config.php'
 ?>
     <!DOCTYPE html>
     <html lang="fa">
@@ -67,7 +46,7 @@ if (isset($_SESSION['email']) && !empty($_SESSION['email'])) {
             <div class="deznav">
                 <div class="deznav-scroll">
                     <div class=" dropdown header-bx">
-                        <a class="nav-link header-profile2 position-relative" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
+                        <a class="nav-link header-profile2 position-relative" href=";" role="button" data-bs-toggle="dropdown">
                             <div class="header-img position-relative">
                                 <img src="images/header-img/pic-1.jpg" alt="header-img">
                                 <svg class="header-circle" width="130" height="130" viewBox="0 0 130 130" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -90,29 +69,37 @@ if (isset($_SESSION['email']) && !empty($_SESSION['email'])) {
                     </div>
                     <ul class="metismenu" id="menu">
                         <li>
-                            <a class="has-arrow " href="#" aria-expanded="false">
+                            <a class="has-arrow" href="dashboard.php" aria-expanded="false">
                                 <i class="flaticon-025-dashboard"></i>
                                 <span class="nav-text">داشبورد</span>
                             </a>
                         </li>
                         <li>
-                            <a class="has-arrow " href="cdn.html" aria-expanded="false">
-                                <i class="flaticon-050-info"></i>
-                                <span class="nav-text">CDN کتابخانه آنتی ریپ</span>
+                            <a class="has-arrow " href="https://github.com/FarhamAghdasi/jashnavre_kharazmi" target="_blank" aria-expanded="false">
+                                <i class="flaticon-028-download"></i>
+                                <span class="nav-text">دانلود آنتی ریپ</span>
                             </a>
                         </li>
                         <li>
-                            <a class="has-arrow " href="ckeditor.html" aria-expanded="false">
-                                <i class="flaticon-041-graph"></i>
-                                <span class="nav-text">ابزار ویرایش متن</span>
+                            <a class="has-arrow " href="profile.php" aria-expanded="false">
+                                <i class="flaticon-051-info"></i>
+                                <span class="nav-text">ویرایش پنل کاربری</span>
                             </a>
                         </li>
                         <li>
-                            <a class="has-arrow " href="" aria-expanded="false">
-                                <i class="flaticon-086-star"></i>
-                                <span class="nav-text">راه اندازی کتابخانه آنتی ریپ</span>
+                            <a class="has-arrow " href="setting.php" aria-expanded="false">
+                                <i class="flaticon-066-plus"></i>
+                                <span class="nav-text">ایجاد فایل تنظیمات</span>
                             </a>
                         </li>
+                        <li>
+                            <a onclick="LogOut()" class="has-arrow" aria-expanded="false">
+                                <i class="flaticon-005-back-arrow"></i>
+                                    <span class="nav-text submit-btn">خروج از حساب کاربری</span>
+                            </a>
+                        </li>
+
+
                     </ul>
                 </div>
             </div>
@@ -121,8 +108,8 @@ if (isset($_SESSION['email']) && !empty($_SESSION['email'])) {
             <div class="container-fluid">
 				<div class="row page-titles">
 					<ol class="breadcrumb">
-						<li class="breadcrumb-item active"><a href="javascript:void(0)">صفحه پیشفرض</a></li>
-						<li class="breadcrumb-item"><a href="javascript:void(0)">سامانه</a></li>
+						<li class="breadcrumb-item active"><a href="../index.html">صفحه پیشفرض</a></li>
+						<li class="breadcrumb-item"><a href="#">سامانه</a></li>
 					</ol>
                 </div>
                 <!-- row -->
@@ -131,15 +118,13 @@ if (isset($_SESSION['email']) && !empty($_SESSION['email'])) {
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">فعلا چیزی در دسترس نیست !</h4>
+                                <h4 class="card-title">لینک های کاربردی در اینجا وجود داره :</h4>
                             </div>
                             <div class="card-body">
                                 <p>برای اینکه شما به این صفحه برسید ، تلاش های زیادی کردم و شاید ممکنه خیلی ساده به نظر برسه ، اما کد های زیادی برای اینجا ساخته شده است !</p> <br>
 								<li>
                                     <!-- اینجا هم به صورت ajax انجام میشه -->
-                                <form id="logout-form" action="" method="post" role="form">
-                                    <input id="submit-btn" class="input-group-text" type="button" onclick="LogOut()" value="خروج از حساب کاربری"></input>
-                                </form>
+
                         </li>
                             </div>
                         </div>
@@ -164,7 +149,6 @@ if (isset($_SESSION['email']) && !empty($_SESSION['email'])) {
         <script src="vendor/global/global.min.js"></script>
         <script src="js/custom.min.js"></script>
         <script src="js/deznav-init.js"></script>
-		<script src="js/ajax.js"></script>
         <script src="vendor/sweetalert.min.js"></script>
     </body>
 

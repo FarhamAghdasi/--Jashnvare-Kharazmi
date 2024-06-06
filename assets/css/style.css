@@ -1506,12 +1506,15 @@ p.section-title-white {
     background: #f4f4f4;
     height: 50px;
 }
- #submit-btn {
-    width: 50%;
-    margin-right: 25%;
-     background: #7000ff;
-     box-shadow: -10px 15px 18px rgb(23 23 36 / 10%) !important;
- }
+
+#captcha-image {
+    border-radius: 10px;
+}
+
+#captcha {
+    letter-spacing: 20px;
+    font-family: sans-serif !important;
+}
 
  .focus-input100 {
     position: absolute;

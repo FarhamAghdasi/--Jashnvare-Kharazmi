@@ -4,7 +4,6 @@
  * By Farham Aghdasi
  */
 
-'use strict';
 
 
 /**
@@ -389,21 +388,32 @@ let _Lazy = document.querySelectorAll('[data-src]')
 
 if (CanvasIMG) {
     window.addEventListener('load', () => {
-        let _canvas = document.createElement("canvas");
         _Lazy.forEach((i) => {
+            let _canvas = document.createElement("canvas");
             _canvas.className = i.className;
-            _canvas.setAttribute('data-src', i.getAttribute("data-src"))
+            _canvas.setAttribute('data-src', i.getAttribute("data-src"));
             _canvas.width = i.width;
             _canvas.height = i.height;
 
-            var context = _canvas.getContext("2d");
-            context.drawImage(i, 0, 0);
+            let context = _canvas.getContext("2d");
+            
+            let img = new Image();
+            img.src = i.getAttribute("data-src");
 
-            context.style = 'color:' + CanvasIMG[0] + ';font-family:' + CanvasIMG[1] + ';font-size:' + CanvasIMG[2] + ';text-align:' + CanvasIMG[3]
-            context.textContent = CanvasIMG[4];
-        })
-    })
+            img.onload = function() {
+                context.drawImage(img, 0, 0, _canvas.width, _canvas.height);
+
+                context.fillStyle = CanvasIMG[0];
+                context.font = `${CanvasIMG[2]} ${CanvasIMG[1]}`;
+                context.textAlign = CanvasIMG[3];
+                context.fillText(CanvasIMG[4], _canvas.width / 2, _canvas.height - 10);
+
+                i.parentNode.replaceChild(_canvas, i);
+            };
+        });
+    });
 }
+
 
 
 
@@ -519,7 +529,7 @@ if (MobileOpptions) {
 /**
  * For Chrome
  */
-document.style.zoom = 'reset'
+document.body.style.zoom = 'reset'
 }
 
 

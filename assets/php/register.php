@@ -4,6 +4,7 @@
 require 'config.php';
 
 try {
+    session_start();
     $conn = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASSWORD); // با روش PDO به دیتابیس متصل میشویم
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -14,6 +15,7 @@ try {
     $phone = filter_var($_POST['contactNumber'], FILTER_SANITIZE_STRING);
     // البته اینجا پسورد رو رمز نگاری میکنیم تا امنیت وبسایت فراهم بشه 
     $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
+    $captcha = $_POST['captcha'];
 
     // اول از همه برسی میکنه که نام کاربری ، شماره موبایل یا ایمیل در دیتابیس وجود دارد یا خیر
     $stmt = $conn->prepare("SELECT * FROM users WHERE email = :email OR phone = :phone");
@@ -21,21 +23,26 @@ try {
     $existingUser = $stmt->fetch();
 
     // اگه وجود داشت ارور میده و از طریق json و ajax منتقل میشه
-    if ($existingUser) {
-        $response = ['status' => 'error', 'message' => 'نام ، نام خانوادگی یا ایمیل یا شماره تلفن وارد شده در سامانه ثبت شده است.'];
-    } else {
-        // اگه اوکی بود میاد اطلاعات رو با sql insert وارد دیتابیس میکنه 
-        // البته از قبل من در پوشه import فایل مربوط به sql جدول دیتابیس رو آماده کردم تا اینجا به مشکل نخوره
-        $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, email, phone, password) VALUES (:firstName, :lastName, :email, :phone, :password)");
-        $stmt->execute(['firstName' => $firstName, 'lastName' => $lastName, 'email' => $email, 'phone' => $phone, 'password' => $password]);
-
-        // اینحجا هم اگه اوکی شد که به صورت json / ajax اطلاعات رو به صفحه ثبت نام ارسال میکنه و برعکس
-        if ($stmt->rowCount() > 0) {
-            $response = ['status' => 'success', 'message' => 'ثبت نام شما با موفقیت انجام شد.'];
+    if ($captcha === $_SESSION['captcha']) { 
+        if ($existingUser) {
+            $response = ['status' => 'error', 'message' => 'نام ، نام خانوادگی یا ایمیل یا شماره تلفن وارد شده در سامانه ثبت شده است.'];
         } else {
-            $response = ['status' => 'error', 'message' => 'خطایی در ثبت نام رخ داده است. لطفاً با پشتیبانی تماس بگیرید.'];
+            // اگه اوکی بود میاد اطلاعات رو با sql insert وارد دیتابیس میکنه 
+            // البته از قبل من در پوشه import فایل مربوط به sql جدول دیتابیس رو آماده کردم تا اینجا به مشکل نخوره
+            $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, email, phone, password) VALUES (:firstName, :lastName, :email, :phone, :password)");
+            $stmt->execute(['firstName' => $firstName, 'lastName' => $lastName, 'email' => $email, 'phone' => $phone, 'password' => $password]);
+    
+            // اینحجا هم اگه اوکی شد که به صورت json / ajax اطلاعات رو به صفحه ثبت نام ارسال میکنه و برعکس
+            if ($stmt->rowCount() > 0) {
+                $response = ['status' => 'success', 'message' => 'ثبت نام شما با موفقیت انجام شد.'];
+            } else {
+                $response = ['status' => 'error', 'message' => 'خطایی در ثبت نام رخ داده است. لطفاً با پشتیبانی تماس بگیرید.'];
+            }
         }
-    }
+     } else {
+        $response = ['status' => 'error', 'message' => 'کد کپچا اشتباه است.'];
+     }
+
 
     // ارور هارو به صورت json / ajax منتقل کنه
     echo json_encode($response);

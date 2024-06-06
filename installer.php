@@ -46,25 +46,14 @@ if ($conn->connect_error) {
   die("اتصال به پایگاه داده با مشکل مواجه شد: " . $conn->connect_error);
 }
 
+$log_content = "";
 
-$sql = "CREATE DATABASE form_php";
+$sql = "CREATE DATABASE IF NOT EXISTS form_php";
 
 if ($conn->query($sql) === TRUE) {
-  echo "<script>
-  swal({
-      title: 'موفقیت!',
-      text: 'پایگاه داده form_php با موفقیت ساخته شد.',
-      icon: 'success'
-    });
-  </script>";
+  $log_content .= "پایگاه داده form_php با موفقیت ساخته شد.\n";
 } else {
-  echo "<script>
-  swal({
-      title: 'خطا!',
-      text: 'خطا در ساخت پایگاه داده: ' . $conn->error,
-      icon: 'error'
-    });
-  </script>";
+  $log_content .= "خطا در ساخت پایگاه داده: " . $conn->error . "\n";
 }
 
 $conn->select_db("form_php");
@@ -74,24 +63,31 @@ $sql_statements = explode(";", $sql_file);
 
 foreach ($sql_statements as $statement) {
   if (trim($statement)) {
-    if ($conn->multi_query($statement) === TRUE) {
-      echo "<script>
-      swal({
-          title: 'موفقیت!',
-          text: 'دستور SQL با موفقیت اجرا شد.',
-          icon: 'success'
-        });
-      </script>";
+    if ($conn->query($statement) === TRUE) {
+      $log_content .= "دستور SQL با موفقیت اجرا شد.\n";
     } else {
-      echo "<script>
-      swal({
-          title: 'خطا!',
-          text: 'خطا در اجرای SQL: ' . $conn->error,
-          icon: 'error'
-        });
-      </script>";
+      $log_content .= "خطا در اجرای SQL: " . $conn->error . "\n";
     }
   }
+}
+
+$email = 'admin@example.com';
+$password = 'farham aghdasi';
+$hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+$sql_check = "SELECT * FROM users WHERE email='$email'";
+$result = $conn->query($sql_check);
+
+if ($result->num_rows == 0) {
+  $sql_insert = "INSERT INTO users (email, password) VALUES ('$email', '$hashed_password')";
+  
+  if ($conn->query($sql_insert) === TRUE) {
+    $log_content .= "ایمیل و رمز عبور با موفقیت اضافه شد.\n";
+  } else {
+    $log_content .= "خطا در افزودن ایمیل و رمز عبور: " . $conn->error . "\n";
+  }
+} else {
+  $log_content .= "ایمیل ادمین قبلاً اضافه شده است.\n";
 }
 
 $sql = "SELECT DATABASE()";
@@ -105,9 +101,21 @@ if ($result->num_rows > 0) {
 
 $conn->close();
 
+if (!file_exists('logs')) {
+    mkdir('logs', 0777, true);
+}
+
+$log_file = fopen("logs/installer.log", "a");
+fwrite($log_file, "===== نصب جدید =====\n");
+fwrite($log_file, "نام دیتابیس: $databaseName\n");
+fwrite($log_file, $log_content);
+fclose($log_file);
+
 ?>
                         <h4>نام دیتابیس : <?php echo $databaseName ?></h4>
-                        <h3>برگشت به <a href="index.html">صفحه اصلی</a></h3>
+                        <h4>ایمیل ادمین: <?php echo $email ?></h4>
+                        <h4>رمز عبور ادمین: <?php echo $password ?></h4>
+                        <h3>برگشت به <a href="index.html" target="_blank">صفحه اصلی</a></h3>
                     </div>
                 </div>
             </div>
@@ -124,7 +132,7 @@ $conn->close();
           icon: 'success',
           button: "رویت شد"
         });
-      </script>
+    </script>
 </body>
 
 </html>
