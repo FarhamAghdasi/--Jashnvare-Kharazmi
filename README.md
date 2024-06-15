@@ -27,6 +27,8 @@ https://kharazmi.farhamaghdasi.ir/
 
 پیشنهاد میشود که اطلاعاتی که مربوط به این سورس کد است را به صورت رمز نگاری شده استفاده کنید. 
 
+شما میتوانید فایل تنظیمات را از طریق پنل کاربری ، تولید کنید و وارد فایل js اصلی خودتون کنید . در این صورت شما میتوانید با ابزار های رمز نگاری کننده ، از دانلود شدن و تکثیر شدن غیر قانونی وبسایت یا قالب خود ، جلوگیری کنید
+
 این کتابخانه هم دارای فایل تنظیمات است که شما باید در صفحه مورد نظر خودتون قبل از اجرا شدن کتابخانه ، جای گذاری کنید . یک نمونه برای شما نشان داده میشود : 
 
 ```html 
@@ -34,41 +36,34 @@ https://kharazmi.farhamaghdasi.ir/
         /* 
 Start Settings
 */
-        var Save_page = true;
-        var block_print = true;
-        var idmblocker = true;
-        var idmblocker_message = "متن پیشفرض";
-        var domain_failed = "ایراد در دامنه";
-        var password_page_prompt = "سوال پیشفرض رمز صفحه";
-        var block_rightclick = true;
-        var block_inspect = false;
-        var block_view_source = true;
-        var block_Copy = true;
-        var diasble_alerts = true;
-        var DisableConsole = false;
-        var Allowed_Domains = ["http://localhost/", "127.0.0.1", "127.0.0.1:5500", "localhost"]; // برای اینکه در لوکال هاست اجرا شود
-        var redirection_url = "http://www.farhamaghdasi.ir/";
-        var password_page_action = true;
-        var password_page = "" // بدون پسورد
-        var block_drag = true;
-        var block_iframe_copy = true;
-        var block_rightclick_audio = true;
-        var block_refresh = true;
-        var block_cut_body = true;
-        var block_paste_body = true;
-        var block_paste = true;
-        var block_copy_body = true;
-        var block_fullscreen = true;
-        var canvas = true;
-        var canvas_lazy_load = true;
-        var canvas_fillstyle = "#ffffff";
-        var canvas_font = "10px vazirmatn"
-        var canvas_color = "#000000";
-        var canvas_text = "این تصاویر دارای کپی رایت هستند"
-        var notification_domain = true;
-        var image_src_notification = ""; // بدون تصویر
-        var body_notification = "متن پیام شما";
-        var title_notification = "عنوان اعلان شما";
+DebugMode = false;
+DisableSavePage = true;
+DisablePrint = true;
+DisableAlert = false;
+Disablectrl = false;
+DisableConsole = false;
+BlockPrint = true;
+DisableInspectElement = false;
+DisableViewSource = true;
+DisableCopy = true;
+OfflineDomainChecker = false;
+AllowedProtocol = ['http','https'];
+AllowedDomains = ['sub.domain.ir','kharazmi.farhamaghdasi.ir'];
+SendBlank = false;
+DomainTrapSend = "kharazmi.farhamaghdasi.ir/assets/trap.php";
+PasswordPage = "1234567";
+DisableDrag = true;
+DisableIframe = true;
+DisableAudioDownload = true;
+DisableRefresh = true;
+DisableFullscreen = true;
+DisableScreenShot = false;
+DisablePaste = true;
+LazySizes = true;
+CanvasIMG = ['red','vazirmatn','20px','right','تصاویر دارای کپی رایت هستند'];
+AllowNotification = ['فرهام اقدسی','یک کتابخانه ساده جاوا اسکریپت'];
+OfflineNotify = true;
+MobileOpptions = true
         /* 
 End Settings
 */
@@ -105,5 +100,18 @@ End Settings
 - غیر فعال کردن ارور های کنسول ، رفرش کردن صفحه
 - غیر فعال کردن حالت کشیدن ، رهاکردن صفحات
 - توسعه یافته با vanilla js
+- پشتیبانی از jquery 
+- محدود کردن پروتکل ها 
+- جلوگیری از ریپر ها
+- حذف دکمه دانلود صدا
+- lazysize اتوماتیک
+- پنل کاربری برای ساخت فایل تنظیمات
+- غیر فعال کردن تمام صفحه
+- غیر فعال کردن تمامی دستوراتی که با ctrl انجام میشوند
+- غیر فعال کردن رفرش ، کپی ، پیست
+- لایسنس به صورت آفلاین بدون دامنه
+- ترپ دامنه
+- پسورد دامنه
+- برسی آنلاین یا آفلاین بودن
 
 
