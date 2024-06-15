@@ -32,7 +32,7 @@ https://kharazmi.farhamaghdasi.ir/
 این کتابخانه هم دارای فایل تنظیمات است که شما باید در صفحه مورد نظر خودتون قبل از اجرا شدن کتابخانه ، جای گذاری کنید . یک نمونه برای شما نشان داده میشود : 
 
 ```html 
- <script language="javascript" id="antirip>
+ <script language="javascript" id="antirip">
         /* 
 Start Settings
 */
