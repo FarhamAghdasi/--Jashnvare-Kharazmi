@@ -1,600 +1,539 @@
-/*
-AntiRip.js
-Created by Farham Aghdasi
-2024
-*/
+/**
+ * AntiRip.js
+ * Version 1.2
+ * By Farham Aghdasi
+ */
 
-/*
-توجه کنید که تنظیمات این اسکریپت باید در همان صفحه ای که میخواهید استفاده کنید باشد . اگر هم میخواهید میتوانید کد های زیر رو آن کامند کنید و استفاده کنید 
-در صفحه تست پیج فایل تنظیمات در قسمت پایینی صفحه قرار دارد
-*/
 
-/* 
-        var Save_page = true;
-        var block_print = true;
-        var idmblocker = true;
-        var idmblocker_message = "متن پیشفرض";
-        var domain_failed = "ایراد در دامنه";
-        var password_page_prompt = "سوال پیشفرض رمز صفحه";
-        var block_rightclick = true;
-        var block_inspect = false;
-        var block_view_source = true;
-        var block_Copy = true;
-        var diasble_alerts = true;
-        var DisableConsole = false;
-        var add_license_project = true;
-        var Allowed_Domains = ["http://localhost/", "127.0.0.1", "127.0.0.1:5500", "localhost"]; // برای اینکه در لوکال هاست اجرا شود
-        var redirection_url = "http://www.farhamaghdasi.ir/";
-        var password_page_action = true;
-        var password_page = "" // بدون پسورد
-        var block_drag = true;
-        var block_iframe_copy = true;
-        var block_rightclick_audio = true;
-        var block_refresh = true;
-        var block_cut_body = true;
-        var block_paste_body = true;
-        var block_paste = true;
-        var block_copy_body = true;
-        var block_fullscreen = true;
-        var canvas = true;
-        var canvas_lazy_load = true;
-        var canvas_fillstyle = "#ffffff";
-        var canvas_font = "10px vazirmatn"
-        var canvas_color = "#000000";
-        var canvas_text = "این تصاویر دارای کپی رایت هستند"
-        var notification_domain = true;
-        var image_src_notification = ""; // بدون تصویر
-        var body_notification = "متن پیام شما";
-        var title_notification = "عنوان اعلان شما";
-*/
 
-/* Note : 
-برای اینکه فرد بتواند به راحتی از این کتابخانه استفاده کند و امکان سفارش سازی داشته باشد ، به صورت حلقه ایف قرار دادم که اگر متغیر مربوط به حلقه ، true باشد ، اون موقع اجرا شود
-*/
+/**
+ * Before Use :
+ * ساختار به صورت فایل ستینگ هست ، یعنی در واقع نیازمند به یک فایل تنظیمات برای اجرا کردن هر یک از دستورات هست که کار شمارو ساده تر میکنه
+ * برای همین پیشنهاد میشه فایل تنظیمات رو حذف کنید ، سپس کد هایی که نیاز دارید رو در قالب خودتون قرار بدید
+ * چون باعث میشه احتمال دزدیده شدن قالب شما کاهش پیدا کنه
+ */
 
-// تعریف تابع به نام clearAlerts
-function clearAlerts() {
-    // اگر متغیر diasble_alerts تنظیم شده باشد (true)، کار را انجام بده
-    // اگر تنظیم شده باشد که false، این تابع عمل نمی‌کند
-    if (diasble_alerts) { // if set true = work | if set false = stop 
-        // یافتن تمام المان‌هایی با کلاس alert و ذخیره آن‌ها در متغیر alerts
-        var alerts = document.querySelectorAll(".alert");
-
-        // حلقه برای پیمایش تمام المان‌های با کلاس alert
-        for (var i = 0; i < alerts.length; i++) {
-            // پاک کردن محتوای داخل المان‌های هشدار
-            alerts[i].innerHTML = "";
-
-            // غیرفعال کردن المان‌های هشدار
-            alerts[i].disabled = true;
-        }
-
-        // جایگزینی تابع window.alert با یک تابع خالی تا هیچ هشداری نمایش داده نشود
-        window.alert = function() {};
+/**
+ * Set Default Value
+ ?! زمانی که متغیر ها فراخوانی نشده باشند ، مقدار دیفالت قرار داده میشه
+ */
+let AllowedDomains, AllowedProtocol, OfflineDomainChecker;
+function DefaultValue(SettingNames) {
+    if (SettingNames === undefined) {
+        SettingNames = false;
     }
 }
-
-
-clearAlerts();
-
-// تعریف تابع به نام disableConsoleLog
-function disableConsoleLog() {
-    // اگر متغیر DisableConsole تنظیم شده باشد (true)، تابع را غیرفعال کن
-    if (DisableConsole) {
-        // جایگزینی تابع console.log با یک تابع خالی تا هیچ پیامی در کنسول چاپ نشود
-        console.log = function() {};
-    }
-}
-
-
-disableConsoleLog();
-
-
-// 1 ) Block Ctrl + s
-// تابع onKeyDown برای پیشگیری از عملیات Ctrl + S (ذخیره‌سازی)
-function onKeyDown() {
-    // بررسی اینکه آیا کلید Ctrl و کلید S فشرده شده‌اند
-    if (event.ctrlKey && event.keyCode === 83) {
-        // اگر متغیر Save_page تنظیم شده باشد (true)، عملیات پیشگیری انجام شود
-        if (Save_page) {
-            // پیشگیری از عملیات پیش فرض مرورگر برای Ctrl + S
-            event.preventDefault();
-        }
-    }
-}
-
-// اضافه کردن گوش دهنده‌ی رویداد برای کلیدهای فشرده شده
-document.addEventListener("keydown", onKeyDown);
-
-// 2 ) ctrl + p block
-// اضافه کردن گوش دهنده‌ی رویداد برای کلیدهای فشرده شده
-document.addEventListener('keydown', function(e) {
-    // بررسی اینکه آیا کلید Ctrl و کلید P فشرده شده‌اند
-    if (e.ctrlKey && e.key === 'p') {
-        // اگر متغیر block_print تنظیم شده باشد (true)، عملیات پیشگیری انجام شود
-        if (block_print) {
-            // پیشگیری از عملیات پیش فرض مرورگر برای Ctrl + P
-            e.preventDefault();
-        }
-    }
-});
-
-
-
-// 4 ) Block IDM Downloading
-
-// اضافه کردن گوش دهنده‌ی رویداد برای وقتی که محتوای صفحه به صورت کامل بارگذاری شده است
-document.addEventListener('DOMContentLoaded', function() {
-    // بررسی اینکه آیا User Agent شامل عبارت 'IDM' است یا خیر (به معنای استفاده از Internet Download Manager)
-    if (window.navigator.userAgent.includes('IDM')) {
-        // اگر متغیر idmblocker تنظیم شده باشد (true)، یک هشدار نمایش داده می‌شود
-        if (idmblocker) {
-            alert(idmblocker_message); // نمایش هشدار با محتوای تعیین شده در idmblocker_message
-        }
-    }
-});
-
-// تابع idmBlocker برای اعمال Content Security Policy برای پیشگیری از دانلود محتوا با IDM
-function idmBlocker() {
-    // اگر متغیر idmblocker تنظیم شده باشد (true)، یک meta tag به head اضافه می‌شود
-    if (idmblocker) {
-        document.querySelector('head').innerHTML += `
-            <meta http-equiv="Content-Security-Policy" content="default-src 'self';">
-        `;
-    }
-}
-
-// فراخوانی تابع idmBlocker برای اجرای آن
-idmBlocker();
-
-
-// 4 ) block right click
-// اضافه کردن گوش دهنده‌ی رویداد برای زمانی که منوی راست ماوس نمایش داده می‌شود
-document.addEventListener('contextmenu', function(e) {
-    // اگر متغیر block_rightclick تنظیم شده باشد (true)، عملیات پیشگیری انجام شود
-    if (block_rightclick) {
-        // پیشگیری از نمایش منوی راست ماوس
-        e.preventDefault();
-    }
-});
-
-// 6 ) Block inspect element
-// تابع blockInspect برای مسدود کردن ابزار "Inspect Element"
-function blockInspect() {
-    // اگر متغیر block_inspect تنظیم شده باشد (true)، گوش دادن به رویدادهای کلیدی
-    if (block_inspect) {
-        document.addEventListener('keydown', function(e) {
-            // بررسی اینکه آیا کلید F12 یا ترکیب کلید Ctrl + I فشرده شده‌اند
-            if (e.key === 'F12' || (e.ctrlKey && e.key === 'I')) {
-                // پیشگیری از اجرای پیش فرض مرورگر برای باز کردن "Inspect Element"
-                e.preventDefault();
-            }
-        });
-    }
-}
-
-// فراخوانی تابع blockInspect برای اجرای آن
-blockInspect();
-
-
-
-// Block Ctrl U (View Source)
-// تابع blockU برای مسدود کردن Ctrl + U (مشاهده منبع صفحه)
-function blockU() {
-    // اگر متغیر block_view_source تنظیم شده باشد (true)، گوش دادن به رویدادهای کلیدی
-    if (block_view_source) {
-        document.addEventListener("keydown", function(event) {
-            // بررسی اینکه آیا کلید Ctrl و کلید U فشرده شده‌اند
-            if (event.ctrlKey && event.keyCode === 85) {
-                // پیشگیری از عملیات پیش فرض مرورگر برای باز کردن منبع صفحه
-                event.preventDefault();
-            }
-        });
-    }
-}
-
-// فراخوانی تابع blockU برای اجرای آن
-blockU();
-
-
-
-
-// Block Ctrl C (copy)
-// تابع blockCopy برای مسدود کردن Ctrl + C (کپی کردن)
-function blockCopy() {
-    // اضافه کردن گوش دهنده‌ی رویداد برای زمانی که کلیدهایی فشرده می‌شوند
-    document.addEventListener("keydown", (e) => {
-        // بررسی اینکه آیا متغیر block_Copy تنظیم شده است و کاربر کلیدهای Ctrl + C را فشرده است
-        if (block_Copy && (e.ctrlKey && e.keyCode === 67)) {
-            // پیشگیری از عملیات پیش فرض مرورگر برای کپی کردن
-            e.preventDefault();
-        }
-    });
-}
-
-// فراخوانی تابع blockCopy برای اجرای آن
-blockCopy();
-
-
-// Doamin V1
-// در این روش اگر آدرس دامنه با آدرس تعریف شده متفاوت باشد ، آنگاه به صفحه مورد نظر فرستاده میشود
-
-// در اینجا آرایه‌ای از آدرس‌های دامنه‌های مجاز تعریف شده است
-const allowedDomains = Allowed_Domains;
-
-// دریافت آدرس دامنه کنونی
-const currentDomain = window.location.hostname;
-
-// ساخت حلقه با مقادیر ture , false
-if (add_license_project) {
-// اگر آدرس دامنه کنونی در آرایه دامنه‌های مجاز نیست
-if (!allowedDomains.includes(currentDomain)) {
-    // نمایش هشدار به کاربر با محتوای تعیین شده در متغیر domain_failed
-    alert(domain_failed);
-
-    // هدایت کاربر به آدرس مشخص شده در redirection_url
-    window.location.replace(redirection_url);
-
-    // پاک کردن محتوای صفحه فعلی
-    document.body.innerHTML = "";
-}
-
-}
-
-
-// تابع getPassword برای دریافت رمز عبور از کاربر استفاده می‌شود
-function getPassword() {
-    // اگر عملکرد صفحه رمز عبور فعال باشد
-    if (password_page_action) {
-        // نمایش پنجره درخواست رمز عبور به کاربر با پیام مشخص شده در password_page_prompt
-        var password = prompt(password_page_prompt);
-
-        // بازگرداندن رمز عبور به تابع فراخواننده
-        return password;
-    }
-}
-
-// تابع checkPassword برای بررسی صحت رمز عبور و انجام اقدامات مربوطه استفاده می‌شود
-function checkPassword(password) {
-    // اگر عملکرد صفحه رمز عبور فعال باشد
-    if (password_page_action) {
-        // تعیین رمز عبور صحیح
-        var correctPassword = password_page;
-
-        // بررسی مطابقت رمز عبور وارد شده با رمز عبور صحیح
-        if (password === correctPassword) {
-            // در صورت تطابق، هیچ اقدامی انجام نمی‌شود
-        } else {
-            // در صورت عدم تطابق، هدایت کاربر به آدرس جدید و پاک کردن محتوای صفحه
-            window.location.replace(redirection_url);
-            document.body.innerHTML = "";
-        }
-    }
-}
-
-// دریافت رمز عبور از کاربر
-var password = getPassword();
-
-// بررسی صحت رمز عبور
-checkPassword(password);
-
-
-
-
-// تمامی عناصر صفحه را انتخاب کرده و بررسی می‌کنیم که آیا باید عملیات کشیدن برای آن‌ها مسدود شود یا خیر
-document.querySelectorAll('*').forEach(function(element) {
-    // اگر متغیر block_drag تنظیم شده باشد (true)، گوش دادن به رویداد dragstart برای عناصر صفحه
-    if (block_drag) {
-        element.addEventListener('dragstart', preventDrag);
-    }
-});
-
-// تابع preventCopy برای مسدود کردن عملیات کپی کردن متن
-function preventCopy(event) {
-    // اگر متغیر block_drag تنظیم شده باشد (true)، پیشگیری از عملیات پیش فرض مرورگر برای کپی کردن متن
-    if (block_drag) {
-        event.preventDefault();
-    }
-}
-
-// تابع preventDownload برای مسدود کردن عملیات دانلود
-function preventDownload(event) {
-    // اگر متغیر block_drag تنظیم شده باشد (true)، پیشگیری از عملیات پیش فرض مرورگر برای دانلود فایل‌ها
-    if (block_drag) {
-        event.preventDefault();
-    }
-}
-
-// تابع preventDrag برای مسدود کردن عملیات کشیدن
-function preventDrag(event) {
-    // اگر متغیر block_drag تنظیم شده باشد (true)، پیشگیری از عملیات پیش فرض مرورگر برای کشیدن
-    if (block_drag) {
-        event.preventDefault();
-    }
-}
-
-
-
-
-// Iframe
-
-// انتخاب همه‌ی عناصری با کلاس proc-content و انجام عملیات مورد نیاز
-document.querySelectorAll('.proc-content').forEach(function(iframe) {
-    // اگر متغیر block_iframe_copy تنظیم شده باشد (true)
-    if (block_iframe_copy) {
-        // انتخاب دیو با آی‌دی overlay و تنظیم مشخصات آن برای پنهان سازی iframe
-        var overlay = document.querySelector('#overlay');
-        overlay.style.position = 'absolute';
-        overlay.style.top = '0';
-        overlay.style.left = '0';
-        overlay.style.width = '100%';
-        overlay.style.height = '100%';
-        overlay.style.zIndex = '1';
-        overlay.style.cursor = 'not-allowed';
-    }
-});
-
-// Note  : باید قبل از تگ iframe ، یک دیو با آی دی overlay بسازید تا سورس کار کند
-
-
-
-
-// Block Audio Settings
-
-
-// انتخاب همه‌ی عناصر audio و اعمال عملیات مورد نیاز برای هر کدام
-document.querySelectorAll('audio').forEach(function(audio) {
-    // اضافه کردن گوش دهنده‌ی رویداد contextmenu برای هر عنصر audio
-    audio.addEventListener('contextmenu', function(event) {
-        // اگر متغیر block_rightclick_audio تنظیم شده باشد (true)
-        if (block_rightclick_audio) {
-            // پیشگیری از نمایش منوی راست موس
-            event.preventDefault();
-        }
-    });
-});
-
-
-// ممکنه افراد با کلیک راست کردن بر روی قسمت های مختلف وبسایت ، بتوانند محتوای وبسایت را ببینند ، به خاطر همین قسمت صدا هم غیر فعال کردیم
-
-
-
-
-
-// Block Refresh or F5
-// البته زمانی که کاربر صفحه را رفرش میکند ، امکان دیدن سورس کد را دارد و باید این کد رو توی قسمت اول وبسایت قرار بدید
-
-// اگر متغیر block_refresh تنظیم شده باشد (true)
-if (block_refresh) {
-    // تابع preventRefresh برای جلوگیری از رفرش صفحه تعریف شده است
-    function preventRefresh() {
-        // اضافه کردن گوش دهنده‌ی رویداد keydown به صفحه
-        document.addEventListener("keydown", function(event) {
-            // بررسی کد کلید فشرده شده توسط کاربر و اگر کلیدهای مشخص شده برای رفرش فشرده شده‌اند، پیشگیری از رفرش صفحه
-            if (event.keyCode === 116 || (event.ctrlKey && event.keyCode === 82) || (event.ctrlKey && event.shiftKey && event.keyCode === 82) || (event.altKey && event.keyCode === 82)) {
-                event.preventDefault();
-            }
-        });
-    }
-
-    // فراخوانی تابع preventRefresh برای اجرای آن
-    preventRefresh();
-}
-
-
-
-// اگر متغیر block_cut_body تنظیم شده باشد (true)
-if (block_cut_body) {
-    // تابع disableCopyCut برای جلوگیری از عملیات برش متن تعریف شده است
-    function disableCopyCut() {
-        // تنظیم یک ویژگی اختصاصی به بدنه صفحه که در صورت برش متن، عملیات پیشفرض مرورگر را متوقف می‌کند
-        document.body.setAttribute("oncut", "return true");
-    }
-
-    // فراخوانی تابع disableCopyCut برای اجرای آن
-    disableCopyCut();
-
-    // اگر متغیر block_paste_body تنظیم شده باشد (true)
-    if (block_paste_body) {
-        // تابع disableCopyPaste برای جلوگیری از عملیات چسباندن متن تعریف شده است
-        function disableCopyPaste() {
-            // تنظیم یک ویژگی اختصاصی به بدنه صفحه که در صورت چسباندن متن، عملیات پیشفرض مرورگر را متوقف می‌کند
-            document.body.setAttribute("onpaste", "return true");
-        }
-
-        // فراخوانی تابع disableCopyPaste برای اجرای آن
-        disableCopyPaste();
-
-        // اگر متغیر block_copy_body تنظیم شده باشد (true)
-        if (block_copy_body) {
-            // تابع disableCopy برای جلوگیری از عملیات کپی کردن متن تعریف شده است
-            function disableCopy() {
-                // تنظیم یک ویژگی اختصاصی به بدنه صفحه که در صورت کپی کردن متن، عملیات پیشفرض مرورگر را متوقف می‌کند
-                document.body.setAttribute("oncopy", "return true");
-            }
-
-            // فراخوانی تابع disableCopy برای اجرای آن
-            disableCopy();
-        }
-    }
-}
-
-
-// Block Paste (Fix 2)
-
-const input = document.querySelector('*');
-
-// تعریف تابع blockDrag برای جلوگیری از عمل کپی کردن متن در یک ورودی
-function blockDrag() {
-    // اگر متغیر block_paste به true تنظیم شده باشد
-    if (block_paste) {
-        // اضافه کردن گوش دهنده رویداد (event listener) بر روی ورودی
-        input.addEventListener('keydown', function(e) {
-            // اگر کاربر کلید Ctrl و کلید V را فشار دهد (کپی کردن)
-            if (e.keyCode === 86 && e.ctrlKey) {
-                // پیشگیری از عمل کپی کردن متن
-                e.preventDefault();
-            }
-        });
-    }
-}
-
-// فراخوانی تابع blockDrag برای اجرای آن
-blockDrag();
-
-
-
-// Block full screnn
-// اگر متغیر block_fullscreen به true تنظیم شده باشد
-if (block_fullscreen) {
-    // تعریف تابع disableFullScreen برای جلوگیری از ورود به حالت تمام صفحه
-    function disableFullScreen() {
-        // اضافه کردن گوش دهنده رویداد (event listener) بر روی پنجره
-        window.addEventListener("keydown", function(event) {
-            // اگر کاربر کلید F11 را فشار دهد (ورود به حالت تمام صفحه)
-            if (event.keyCode === 122) {
-                // پیشگیری از ورود به حالت تمام صفحه
-                event.preventDefault();
-                // دوباره اضافه کردن گوش دهنده رویداد برای اعمال مجدد این کارکرد بعد از بارگذاری صفحه
-                window.addEventListener("DOMContentLoaded", disableFullScreen);
-            }
-        });
-    }
-
-    // فراخوانی تابع disableFullScreen برای اجرای آن
-    disableFullScreen();
-}
-
-
-// Canvas V1.1
-// یک سیستمی برای رمز نگاری تصاویر است که میتوانید تمامی تصاویر وبسایت را به canvas تبدیل کنید و بر روی آن اسم لایسنس بنویسید
-// اگر متغیر canvas وجود داشته باشد (یعنی تصاویر به عنوان canvas معرفی شده‌اند)
-if (canvas) {
-    // تابع imgToCanvas برای تبدیل یک تصویر به یک گرافیک کانواس
-    function imgToCanvas(img) {
-        // ایجاد یک عنصر کانواس جدید
-        var canvas = document.createElement("canvas");
-        canvas.width = img.width;
-        canvas.height = img.height;
-
-        // دریافت context 2D برای کانواس
-        var context = canvas.getContext("2d");
-        // رسم تصویر در کانواس
-        context.drawImage(img, 0, 0);
-
-        // تنظیمات دیگر برای کانواس مانند پس‌زمینه، فونت، رنگ و متن
-        context.fillStyle = canvas_fillstyle; // پس‌زمینه سفید
-        context.font = "10px vazirmatn"; // فونت و اندازه فونت
-        context.color = canvas_color; // رنگ متن
-        context.textAlign = "left"; // راست چین کردن متن
-        context.fillText(canvas_text, 10, 10); // متن آب‌علامت
-
-        return canvas;
-    }
-
-    // تابع convertImgsToCanvas برای تبدیل تمام تصاویر به گرافیک‌های کانواس
-    function convertImgsToCanvas() {
-        var imgs = document.querySelectorAll("img");
-
-        for (var i = 0; i < imgs.length; i++) {
-            var canvas = imgToCanvas(imgs[i]);
-
-            // جایگزینی تصویر با کانواس در DOM
-            imgs[i].parentNode.replaceChild(canvas, imgs[i]);
-
-            // انتقال کلاس‌ها از تصویر به کانواس
-            var classString = imgs[i].className;
-            canvas.className = classString;
-        }
-    }
-
-    // تابع addLazyLoadToImgs برای اضافه کردن ویژگی lazy load به تصاویر کانواس
-    function addLazyLoadToImgs() {
-        if (canvas_lazy_load) {
-            var imgs = document.querySelectorAll("canvas");
-
-            for (var i = 0; i < imgs.length; i++) {
-                imgs[i].setAttribute("load", "lazy");
-            }
-        }
-    }
-
-    // اجرای توابع برای تبدیل تصاویر به کانواس و اضافه کردن ویژگی lazy load
-    convertImgsToCanvas();
-    addLazyLoadToImgs();
-}
-
-
-
-
-/* Note 
-این کد های بالا در واقع تمامی تگ های تصاویر را به کنواس تبدیل میکنند و شما باید در فایل استایل دهیتون که اگه سلکتور شما با img هست رو تغییر به canvas کنین
-*/
-
-// Notification With JS For Domain
-// این کد در صورت قبول کردن کاربر انجام میشود
-// اگر متغیر notification_domain وجود داشته باشد و آدرس فعلی صفحه در دامنه‌های مجاز برنامه نباشد
-if (notification_domain && !allowedDomains.includes(currentDomain)) {
-    // درخواست دسترسی به نمایش اعلان را از کاربر می‌گیریم
-    Notification.requestPermission().then(function(permission) {
-        console.log(permission); // نمایش دسترسی کاربر به نمایش اعلان در کنسول
-    });
-
-    // دریافت وضعیت فعلی دسترسی نمایش اعلان‌ها
-    let permission = Notification.permission;
-
-    // اگر دسترسی به نمایش اعلان‌ها تایید شده باشد، اعلان را نمایش می‌دهیم
-    if (permission === "granted") {
-        showNotification();
-    }
-    // اگر دسترسی به نمایش اعلان‌ها رد شده باشد، یک درخواست جدید برای دسترسی به نمایش اعلان از کاربر می‌کنیم
-    else if (permission === "default") {
-        requestAndShowPermission();
-    }
-    // اگر دسترسی به نمایش اعلان‌ها مسدود شده باشد، پیامی نمایش داده می‌شود
-    else {
-        alert("درخواست اعلان را به صورت عادی فعال کنید");
-    }
-
-    // تابع requestAndShowPermission برای درخواست دسترسی به نمایش اعلان‌ها از کاربر
-    function requestAndShowPermission() {
-        Notification.requestPermission(function(permission) {
-            if (permission === "granted") {
-                showNotification();
-            }
-        });
-    }
-
-    // تابع showNotification برای نمایش اعلان
-    function showNotification() {
-        let title = body_notification;
-        let icon = image_src_notification; // این تصویر بزرگ است و ممکن است زمان بیشتری برای نمایش اعلان بگیرد. می‌توانید با یک آیکون کوچک جایگزین کنید.
-        let body = body_notification;
-        let notification = new Notification(title, { body, icon });
-
-        // وقتی روی اعلان کلیک می‌شود، اعلان بسته شده و پنجره فعلی فوکوس می‌شود
-        notification.onclick = () => {
-            notification.close();
-            window.parent.focus();
-        }
-    }
-
-    // نمایش اعلان
-    showNotification();
+DefaultValue(AllowedDomains, AllowedProtocol, OfflineDomainChecker);
+
+
+/**
+ * Debug Mode For AntiRip.js
+ * All Vars Become False
+ ?! این کد ی رفرسن ارور ایجاد میکنه و باعث میشه که راحت تر وارد دیباگ مود بشید 
+ */
+if (DebugMode) {
+    scripts.remove()
 }
 
 /**
- * VERSION 1.2 START
- * ES6 Added
+ * Clear Alert
+ ?! باعث میشه که آلرت هارو پاک کنه
  */
+if (DisableAlert) {
+    window.alert = "";
+}
+
+
+/**
+ * Disable Contole Log
+ * Note: Insert Graphical Console log Up This Code
+ ?! باعث میشه کنسول لاگ رو پاک کنه
+ */
+if (DisableConsole) {
+    console.log = "";
+    setInterval(() => {
+        console.log = "";
+    },1000)
+}
+
+/**
+ * Block Every ctrl Command
+ ?! این کد باعث میشه تمامی دستوراتی که با کنترل شروع میشه پرونت بشه و دیگه نیاز به نوشتن کی کد نیست
+ */
+
+if (Disablectrl) {
+    document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.keyCode) {
+            e.preventDefault() // => Make It Disable
+        }
+    })
+}
+
+/**
+ * Block Ctrl S
+ ?! Prevent Default Ctrl With S (83)
+ */
+
+if (DisableSavePage) {
+    document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.keyCode === 83) {
+            e.preventDefault() // => Make It Disable
+        }
+    })
+}
+
+
+/** 
+ * Block Ctrl P (print)
+ ?! این کد با کی کد کار میکنه و مکانیزم اون با ایونت ها هست
+*/
+if (DisablePrint) {
+    document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.keyCode === 80) {
+            e.preventDefault(); // => Make It Disable
+        }
+    });
+}
+
+
+/**
+ * Block Right Click
+ ?! قابلیت اینسپکت المنت را به طور کامل غیر فعال میکند
+ */
+
+if (DisableInspectElement) {
+    /**
+     * With ContextMenu Event
+     */
+    document.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+    });
+    /**
+     * With F12 And ctrl + i With Keycode
+     */
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'F12' || (e.ctrlKey && e.keyCode === 73)) {
+            e.preventDefault();
+        }
+    });
+}
+
+/**
+ * Hide View Source Shortcut
+ ?!  شورت کات برای دیدن سورس صفحه معمولا کنترل یو است که در اینجا پرونت شده با کی کد
+ */
+
+if (DisableViewSource) {
+    document.addEventListener("keydown", (e) => {
+        if (e.ctrlKey && e.keyCode === 85) {
+            e.preventDefault();
+        }
+    });
+}
+
+/**
+ * Block Copy
+ ?! با استفاده از چند روش ، قابلیت کپی کردن غیر فعال میشود
+ */
+
+if (DisableCopy) {
+    /**
+     * With Event Key Code
+     */
+    document.addEventListener("keydown", (e) => {
+        if (e.ctrlKey && e.keyCode === 67) {
+            e.preventDefault();
+        }
+    });
+    /**
+     * With Body 
+     */
+    document.body.setAttribute("oncut", "return true");
+    /**
+     * With oncopy Event
+     */
+    document.addEventListener('copy', (e) => {
+        e.preventDefault()
+    })
+
+}
+
+/**
+ * Disable Paste
+ ?! با یک ایونت ساده کار میکنه
+ */
+if (DisablePaste) {
+    /**
+     * With Event Key Code
+     */
+    document.addEventListener("keydown", (e) => {
+        if (e.ctrlKey && e.keyCode === 80) {
+            e.preventDefault();
+        }
+    });
+    /**
+     * With Body 
+     */
+    document.body.setAttribute("onpaste", "return true");
+    /**
+     * With oncopy Event
+     */
+    document.addEventListener('paste', (e) => {
+        e.preventDefault()
+    })
+}
+
+
+/**
+ * Domain License
+ ?! عنوان دامنه ها درون یک آبجکت قرار میگیرد که فقط سایت هایی که دامنه آنها با این برابر است ، دسترسی لود شدن میدهند
+ */
+
+const DomainURL = new URL(window.location.href);
+let TrapEn;
+
+/**
+ ?! متغیر اول برای راحت کردن کار ما و انجام کار های مختلف مربوط به آدرس دامنه و ... میشه
+ ?! دومی زمانی که با دامنه مطابقت نداشت ، برابر با ترو میشه و در قسمت ترپ ها ، کار ما انجام میشه
+ */
+
+/**
+ * Protocol Checker
+ ?! چندین بخش داره که در اینجا از پروتکل و چیز های دیگه استفاده شده
+ ?! البته برای اینکه حجم کد کم بشه ، بجای اینکه متغیر دیگه ای با فیلد تروع قرار بدیم ، از تایپ آف استفاده میکنیم
+ */
+
+if (AllowedProtocol) {
+    if (!AllowedProtocol.includes(DomainURL.protocol)) {
+        TrapEn = true;
+    }
+}
+
+/**
+ * Host Domain Checker
+ ?! دامنه ، ساب دامنه و آدرس هر قسمت اگه با این مطابقت نداشته باشه ، ترپ فعال میشه
+ */
+
+if (AllowedDomains && !PasswordPage) {
+    if (!AllowedDomains.includes(DomainURL.host)) {
+        TrapEn = true;
+    }
+}
+
+/** 
+ * Domain Checker With out Setting Files
+ ?! به دلیل اینکه معمولا اگه فایل داخل کامپیوتر یک نفر دانلود شده باشه ، بر روی پروتکل فایلس هست ، فقط از این برای شناسایی استفاده میکنیم
+*/
+if (OfflineDomainChecker && !PasswordPage) {
+    if (DomainURL.origin === 'files:' || DomainURL.protocol === 'file:') {
+        TrapEn = true;
+    }
+}
+
+/**
+ * Note : زمانی که پسورد فعاله ، دیگه دامنه و پروتکل قابل اجرا نیست و برعکس
+ */
+
+/**
+ * Set Page Password 
+ ?! یک پسورد به صورت رمز نگاری شده ایجاد میشه ، سپس شما میتونید اون رو برای صفحه قرار بدید
+ ?! این رمز نگاری با ام دی 5 هست و باعث میشه امنیت کمی بالاتر بره
+ */
+
+if (PasswordPage) {
+    let hash__ = MD5.generate(PasswordPage);
+    let __check = MD5.generate(prompt("Enter The Password"));
+    if (__check !== hash__) {
+        TrapEn = true;
+    }
+}
+
+/**
+ * Send Member To Blank Page
+ * Note : When TrapEn is True ,You Can Use This Code
+ */
+if (SendBlank) {
+    window.addEventListener('load', () => {
+        setInterval(() => {
+            window.open()
+        }, 5000)
+    })
+}
+
+
+/**
+* Notify Before Window Close
+?! با استفاده از یک ایونت ، باعث میشه از کاربر ، درخواست کنه
+*/
+window.onbeforeunload = (e) => { return e }
+
+
+
+
+/**
+ * Trap For Domain
+ ?! این ابزار ، باعث میشه که کاربر رو به یک صفحه پی اچ پی با یک کوئری نام دامنه انتقال بده که اینشکلی تمامی افرادی که قالب رو دریافت و اجرا کردند مشاهده بشه
+ */
+let TitleOfFile = document.querySelector('title').textContent;
+let URLquery = "https://" + DomainTrapSend + "?" + DomainURL.pathname + TitleOfFile;
+
+if (TrapEn) {
+    window.location.href = URLquery;
+}
+
+/**
+ * Disable Drag Content
+ ?! از کپی کردن المنت ها جلوگیری میکنه و تمامی ایونت ها درگ ، دراپ رو غیر فعال میکنه
+ */
+
+if (DisableDrag) {
+    addEventListener('dragstart', (e) => {
+        e.preventDefault()
+    })
+    addEventListener('dragover', (e) => {
+        e.preventDefault()
+    })
+    addEventListener('dragleave', (e) => {
+        e.preventDefault()
+    })
+    addEventListener('dragend', (e) => {
+        e.preventDefault()
+    })
+}
+
+/**
+ * Disable Iframe
+ ?! یک المنت بالای ای فریم قرار میگیره که از کپی کردن و... جلوگیری میکنه
+ */
+
+let overlay = document.createElement('div');
+overlay.style = 'position:absolute;top:0;left:0;width:100%;height:100%;zIndex:1;cursor:not-allowed'
+
+if (DisableIframe) {
+    document.querySelectorAll('iframe').forEach((i) => {
+        i.parentElement.append(overlay)
+    })
+}
+
+/**
+ * Disable Audio Download Button 
+ ?! یک اتریبیوت به تگ های صدا اضافه میشه تا این از دانلود جلوگیری بشه
+ */
+
+if (DisableAudioDownload) {
+    document.querySelectorAll('audio').forEach((i) => {
+        i.setAttribute('controlsList', 'nodownload');
+        i.setAttribute('preload' , 'none');
+        document.style = 'audio::-webkit-media-controls-enclosure {overflow:hidden;}audio::-webkit-media-controls-panel {width: calc(100% + 30px);}'
+    })
+}
+
+
+
+
+/**
+ * Disable F5 
+ ?! در واقع چند تا از شورت کات ها برای غیر فعال کردن رفرش ، ایجاد شده
+ */
+
+if (DisableRefresh) {
+    document.addEventListener("keydown", (e) => {
+        if (e.keyCode === 116 || (e.ctrlKey && e.keyCode === 82) || (e.ctrlKey && e.shiftKey && e.keyCode === 82) || (e.altKey && e.keyCode === 82)) {
+            e.preventDefault();
+        }
+    });
+}
+
+
+
+/**
+ * Disable Full Screen
+ ?! با استفاده از ایونت های ساده نوشته میشه
+ */
+if (DisableFullscreen) {
+    window.addEventListener("keydown", (e) => {
+        if (e.keyCode === 122) {
+            e.preventDefault();
+        }
+    });
+}
+
+/**
+ * lazysizes
+ ?! به صورت اتوماتیک لیزی لود رو به تصاویر می فرسته البته پیشنهاد میشه که به صورت دستی این کار روانجام بدید
+ // یعنی اینکه پس از اجرا شدن این اسکریپت ، سورس کد رو در فایل اصلی قرار بدید
+ */
+let _IMG = document.querySelectorAll('img');
+
+if (LazySizes) {
+
+    _IMG.forEach((i) => {
+        // let __Data = e.getAttribute('src');
+        // e.removeAttribute('src')
+        // e.setAttribute('data-src' , __Data);
+        i.classList.add('lazyload')
+    })
+}
+
+
+
+
+/**
+ * IMG to Canvas (No Rip)
+ ?! تمامی تصاویر وبسایت رو به canvas تبدیل میکنه و متن کپی رایت درون اون قرار میده
+ Note : زمانی که لیزی لود داره استفاده میشه ، دیگه این روز کاربردی نداره چون به طور پیشفرض بهینه سازی میکنه و نیازی به این نیست
+ */
+
+let _Lazy = document.querySelectorAll('[data-src]')
+
+if (CanvasIMG) {
+    window.addEventListener('load', () => {
+        _Lazy.forEach((i) => {
+            let _canvas = document.createElement("canvas");
+            _canvas.className = i.className;
+            _canvas.setAttribute('data-src', i.getAttribute("data-src"));
+            _canvas.width = i.width;
+            _canvas.height = i.height;
+
+            let context = _canvas.getContext("2d");
+            
+            let img = new Image();
+            img.src = i.getAttribute("data-src");
+
+            img.onload = function() {
+                context.drawImage(img, 0, 0, _canvas.width, _canvas.height);
+
+                context.fillStyle = CanvasIMG[0];
+                context.font = `${CanvasIMG[2]} ${CanvasIMG[1]}`;
+                context.textAlign = CanvasIMG[3];
+                context.fillText(CanvasIMG[4], _canvas.width / 2, _canvas.height - 10);
+
+                i.parentNode.replaceChild(_canvas, i);
+            };
+        });
+    });
+}
+
+
+
+
+
+
+/**
+ * Notification Tool
+ ?! میتونید متن دلخواه و هر چیزی که دلتون خواست رو توش قرار بدید و کاربرد های مختلفی داره
+ ?! این نسخه با کمک ای پی آی نوتیفیکشن ساخته شده
+ */
+
+if (AllowNotification && !("Notification" in window)) {
+    swal("ارور !", "مرورگر شما از اعلان ها پشتیبانی نمیکند !", "error");
+} else if (Notification.permission === "granted") {
+    new Notification(AllowNotification[0], {
+        body: AllowNotification[1],
+        icon: AllowNotification[2],
+        vibrate: true
+    });
+} else {
+    Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+            new Notification(AllowNotification[0], {
+                body: AllowNotification[1],
+                icon: AllowNotification[2],
+                vibrate: true
+            });
+        } else {
+            // Handle the case where user denies or blocks notifications
+            swal("ارور !", "مرورگر شما از اعلان ها پشتیبانی نمیکند !", "error");
+        }
+    });
+}
+
+
+/**
+ * Graphical Console Log
+ */
+
+console.log("%c AntiRip.js v1.2", "color:red;background:black;border-radius:30px;box-shadow: 0 1px 10px 0 rgba(0,0,0,0.2);color: red;cursor: not-allowed;font-size:30px;padding:20px");
+
+
+/**
+ * Delete Setting File After Loading Page
+ */
+
+let scripts = document.querySelector('[language="javascript"]');
+
+window.addEventListener('load', () => {
+    if (!DebugMode) {
+        scripts.remove()
+    }
+})
+
 
 /**
  * Block Screenhot Page
  */
+if (DisableScreenShot) {
+    let _Title = document.querySelector('title').textContent;
 
-if (screenhotBlocker) { //=> true
-    document.addEventListener('focus' , () => {
-        console.log("Hello Wolrd !")
+    function BlurPage() {
+        document.body.style = '-webkit-filter: blur(5px);-moz-filter: blur(5px);-ms-filter: blur(5px);-o-filter: blur(5px);filter: blur(5px);';
+        document.title = 'Take Mouse To Body !'
+    }
+
+    function UnBlur() {
+        document.body.style = "-webkit-filter: blur(0px);-moz-filter: blur(0px);-ms-filter: blur(0px);-o-filter: blur(0px);filter: blur(0px);";
+        document.title = _Title
+    }
+
+    document.addEventListener('mouseleave', () => {
+        BlurPage()
     })
+    document.addEventListener('mouseenter', () => {
+        UnBlur()
+    })
+
 }
 
+/**
+ * Online Or Offline
+ */
+
+if (OfflineNotify) {
+/**
+ * First Way
+ */
+window.addEventListener('offline' , () => {
+    swal('You Are Offline !', 'Turn On Network !' ,'warning');
+})
+
+/**
+ * Secend Way
+ */
+if (!window.navigator.onLine) {
+    swal('You Are Offline !', 'Turn On Network !' ,'warning');
+}
+}
+
+
+/**
+ * Mobile Settings
+ ?! دستوراتی مربوط به گوشی ها نوشته شده
+ */
+
+if (MobileOpptions) {
+/**
+ * Disable Zoom In Mobile
+ ?! فقط به متا تگ ویو پورت ، کدی اضافه میشه که از زوم جلوگیری میکنه
+ */
+ document.querySelector('head').append('<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">')
+/**
+ * For Chrome
+ */
+document.body.style.zoom = 'reset'
+}
+
+
+
+/**
+ * Disable Lock Screen For Mobile
+ */
