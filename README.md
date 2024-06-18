@@ -18,7 +18,7 @@
 
 https://kharazmi.farhamaghdasi.ir/
 
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)]((https://github.com/FarhamAghdasi/AntiRip.js/blob/master/LICENSE))
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/FarhamAghdasi/AntiRip.js/blob/master/LICENSE)
 
 
 ## نحوه راه اندازی
