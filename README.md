@@ -34,34 +34,36 @@ https://kharazmi.farhamaghdasi.ir/
         /* 
 Start Settings
 */
-DebugMode = false;
-DisableSavePage = true;
-DisablePrint = true;
-DisableAlert = false;
-Disablectrl = false;
-DisableConsole = false;
-BlockPrint = true;
-DisableInspectElement = false;
-DisableViewSource = true;
-DisableCopy = true;
-OfflineDomainChecker = false;
-AllowedProtocol = ['http','https'];
-AllowedDomains = ['sub.domain.ir','kharazmi.farhamaghdasi.ir'];
-SendBlank = false;
-DomainTrapSend = "kharazmi.farhamaghdasi.ir/assets/trap.php";
-PasswordPage = "1234567";
-DisableDrag = true;
-DisableIframe = true;
-DisableAudioDownload = true;
-DisableRefresh = true;
-DisableFullscreen = true;
-DisableScreenShot = false;
-DisablePaste = true;
-LazySizes = true;
-CanvasIMG = ['red','vazirmatn','20px','right','تصاویر دارای کپی رایت هستند'];
-AllowNotification = ['فرهام اقدسی','یک کتابخانه ساده جاوا اسکریپت'];
-OfflineNotify = true;
-MobileOpptions = true
+        DebugMode = false;
+        DefaultValueVars = false;
+        RemoveScript = false;
+        
+        DisableSavePage = true;
+        DisablePrint = true;
+        DisableAlert = false;
+        Disablectrl = false;
+        DisableConsole = false;
+        BlockPrint = true;
+        DisableInspectElement = false;
+        DisableViewSource = true;
+        DisableCopy = true;
+        OfflineDomainChecker = false;
+        AllowedProtocol = ['https','http'];
+        AllowedDomains = ['kharazmi.farhamaghdasi.ir'];
+        SendBlank = false;
+        DomainTrapSend = "https://kharazmi.farhamaghdasi.ir/assets/trap.php";
+        PasswordPage = 12345;
+        DisableDrag = true;
+        DisableIframe = true;
+        DisableAudioDownload = true;
+        DisableRefresh = true;
+        DisableFullscreen = true;
+        DisableScreenShot = false;
+        DisablePaste = true;
+        LazySizes = true;
+        AllowNotification = ['فرهام اقدسی','یک کتابخانه ساده جاوا اسکریپت'];
+        OfflineNotify = true;
+        MobileOpptions = true;
         /* 
 End Settings
 */
