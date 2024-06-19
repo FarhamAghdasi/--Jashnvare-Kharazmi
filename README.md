@@ -18,9 +18,7 @@
 
 https://kharazmi.farhamaghdasi.ir/
 
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
-[![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
-[![AGPL License](https://img.shields.io/badge/license-AGPL-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/FarhamAghdasi/AntiRip.js/blob/master/LICENSE)
 
 
 ## نحوه راه اندازی
@@ -32,7 +30,7 @@ https://kharazmi.farhamaghdasi.ir/
 این کتابخانه هم دارای فایل تنظیمات است که شما باید در صفحه مورد نظر خودتون قبل از اجرا شدن کتابخانه ، جای گذاری کنید . یک نمونه برای شما نشان داده میشود : 
 
 ```html 
- <script language="javascript">
+ <script language="javascript" id="antirip">
         /* 
 Start Settings
 */

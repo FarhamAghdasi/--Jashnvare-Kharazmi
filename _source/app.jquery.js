@@ -1,305 +1,367 @@
-// alert("به دلیل اینکه شما فایل را به صورت سیو شده مشاهده میکنید ، امکان لایسنس گذاری دامنه را غیر فعال کردم");
-// console.log("به دلیل اینکه شما فایل را به صورت سیو شده مشاهده میکنید ، امکان لایسنس گذاری دامنه را غیر فعال کردم")
+/**
+ * AntiRip.js
+ * Version 1.2
+ * By Farham Aghdasi
+ */
 
-// Clear Alerts
-function clearAlerts() {
-    if (diasble_alerts) {
-        $(".alert").each(function() {
-            $(this).html("");
-            $(this).prop("disabled", true);
-        });
+$(document).ready(function() {
+
+    /**
+     * Set Default Value
+     */
+    let AllowedDomains, AllowedProtocol, OfflineDomainChecker;
+
+    function DefaultValue(SettingNames) {
+        if (SettingNames === undefined) {
+            SettingNames = false;
+        }
+    }
+    DefaultValue(AllowedDomains, AllowedProtocol, OfflineDomainChecker);
+
+
+    /**
+     * Delete Setting File After Loading Page
+     */
+    let scripts = $('[language="javascript"]');
+
+    $(window).on('load', function() {
+        if (RemoveScript) {
+            scripts.remove();
+        }
+    });
+
+
+    /**
+     * Optimize JS
+     */
+    if (DisablePrint) {
+        BlockPrint(80);
+    }
+    if (DisableSavePage) {
+        SavePage(83);
+    }
+    if (DisableViewSource) {
+        HideSourceCode(85);
+    }
+    if (DisableRefresh) {
+        DisableF5(116, 82);
+    }
+    if (DisableFullscreen) {
+        FullScreen(122);
+    }
+
+
+    /**
+     * Debug Mode For AntiRip.js
+     */
+    if (DebugMode) {
+        scripts.remove();
+    }
+
+    /**
+     * Clear Alert
+     */
+    if (DisableAlert) {
         window.alert = function() {};
     }
-}
 
-clearAlerts();
-
-// Disable Console Log
-function disableConsoleLog() {
+    /**
+     * Disable Contole Log
+     */
     if (DisableConsole) {
-        window.console.log = function() {};
+        console.log = function() {};
+        setInterval(function() {
+            console.log = function() {};
+        }, 1000);
     }
-}
 
-disableConsoleLog();
-
-// Keydown Events
-$(document).keydown(function(event) {
-    if (event.ctrlKey && event.which === 83) {
-        if (Save_page) {
-            event.preventDefault();
-        }
-    }
-    if (event.ctrlKey && event.key === 'p') {
-        if (block_print) {
-            event.preventDefault();
-        }
-    }
-});
-
-// IDM Blocker
-$(document).ready(function() {
-    if (window.navigator.userAgent.includes('IDM')) {
-        if (idmblocker) {
-            alert(idmblocker_message);
-        }
-    }
-});
-
-function idmBlocker() {
-    if (idmblocker) {
-        $('head').append('<meta http-equiv="Content-Security-Policy" content="default-src \'self\';">');
-    }
-}
-
-idmBlocker();
-
-// Context Menu Blocker
-$(document).on('contextmenu', function(e) {
-    if (block_rightclick) {
-        e.preventDefault();
-    }
-});
-
-// Block Inspect
-function blockInspect() {
-    if (block_inspect) {
+    /**
+     * Block Every ctrl Command
+     */
+    if (Disablectrl) {
         $(document).on('keydown', function(e) {
-            if (e.key === 'F12' || (e.ctrlKey && e.key === 'I')) {
-                e.preventDefault();
+            if (e.ctrlKey && e.keyCode) {
+                e.preventDefault(); // => Make It Disable
             }
         });
     }
-}
 
-blockInspect();
-
-// Block View Source
-function blockU() {
-    if (block_view_source) {
-        $(document).on("keydown", function(event) {
-            if (event.ctrlKey && event.which === 85) {
-                event.preventDefault();
+    /**
+     * Block Ctrl S
+     */
+    function SavePage(k) {
+        $(document).on('keydown', function(e) {
+            if (e.ctrlKey && e.keyCode === k) {
+                e.preventDefault(); // => Make It Disable
             }
         });
     }
-}
 
-blockU();
+    /**
+     * Block Print
+     */
+    function BlockPrint() {
+        $(document).on('keydown', function(e) {
+            if (e.ctrlKey && e.keyCode === 80) {
+                e.preventDefault(); // => Make It Disable
+            }
+        });
+    }
 
-// Block Copy
-function blockCopy() {
-    $(document).on("keydown", function(e) {
-        if (block_Copy && (e.ctrlKey && e.which === 67)) {
+    /**
+     * Block Right Click
+     */
+    if (DisableInspectElement) {
+        $(document).on('contextmenu', function(e) {
             e.preventDefault();
-        }
-    });
-}
-
-blockCopy();
-
-// Allowed Domains
-const allowedDomains = Allowed_Domains;
-const currentDomain = window.location.hostname;
-
-if (add_license_project) {
-
-if (!allowedDomains.includes(currentDomain)) {
-    alert(domain_failed);
-    window.location.replace(redirection_url);
-    $('body').empty();
-}
-
-}
-
-// Get and Check Password
-function getPassword() {
-    if (password_page_action) {
-        var password = prompt(password_page_prompt);
-        return password;
-    }
-}
-
-function checkPassword(password) {
-    if (password_page_action) {
-        var correctPassword = password_page;
-        if (password === correctPassword) {
-        } else {
-            window.location.replace(redirection_url);
-            $('body').empty();
-        }
-    }
-}
-
-var password = getPassword();
-checkPassword(password);
-
-// Block Drag
-$(document).ready(function() {
-    if (block_drag) {
-        $('*').on('dragstart', function(event) {
-            event.preventDefault();
         });
-    }
-});
-
-// Block Iframe Copy
-$(document).ready(function() {
-    if (block_iframe_copy) {
-        $('.proc-content').each(function() {
-            var overlay = $('#overlay');
-            overlay.css({
-                'position': 'absolute',
-                'top': '0',
-                'left': '0',
-                'width': '100%',
-                'height': '100%',
-                'z-index': '1',
-                'cursor': 'not-allowed'
-            });
-        });
-    }
-});
-
-// Block Audio Rightclick
-$(document).ready(function() {
-    $('audio').on('contextmenu', function(event) {
-        if (block_rightclick_audio) {
-            event.preventDefault();
-        }
-    });
-});
-
-// Block Refresh
-if (block_refresh) {
-    function preventRefresh() {
-        $(document).on("keydown", function(event) {
-            if (event.which === 116 || (event.ctrlKey && event.which === 82) || (event.ctrlKey && event.shiftKey && event.which === 82) || (event.altKey && event.which === 82)) {
-                event.preventDefault();
-            }
-        });
-    }
-    preventRefresh();
-}
-
-// Block Copy, Paste, Cut
-if (block_cut_body) {
-    function disableCopyCut() {
-        $("body").on("cut", function(event) {
-            return true;
-        });
-    }
-    disableCopyCut();
-    if (block_paste_body) {
-        function disableCopyPaste() {
-            $("body").on("paste", function(event) {
-                return true;
-            });
-        }
-        disableCopyPaste();
-        if (block_copy_body) {
-            function disableCopy() {
-                $("body").on("copy", function(event) {
-                    return true;
-                });
-            }
-            disableCopy();
-        }
-    }
-}
-
-// Block Drag
-const input = $('*');
-
-function blockDrag() {
-    if (block_paste) {
-        input.on('keydown', function(e) {
-            if (e.which === 86 && e.ctrlKey) {
+        $(document).on('keydown', function(e) {
+            if (e.key === 'F12' || (e.ctrlKey && e.keyCode === 73)) {
                 e.preventDefault();
             }
         });
     }
-}
-blockDrag();
 
-// Block Fullscreen
-if (block_fullscreen) {
-    function disableFullScreen() {
-        $(window).on("keydown", function(event) {
-            if (event.which === 122) {
-                event.preventDefault();
-                $(window).on("DOMContentLoaded", disableFullScreen);
-            }
-        });
-    }
-    disableFullScreen();
-}
-
-// Convert Images to Canvas
-if (canvas) {
-    function imgToCanvas(img) {
-        var canvas = $("<canvas></canvas>");
-        canvas.prop("width", img.width);
-        canvas.prop("height", img.height);
-        var context = canvas[0].getContext("2d");
-        context.drawImage(img, 0, 0);
-        context.fillStyle = canvas_fillstyle;
-        context.font = "10px vazirmatn";
-        context.fillStyle = canvas_color;
-        context.textAlign = "left";
-        context.fillText(canvas_text, 10, 10);
-        return canvas[0];
-    }
-
-    function convertImgsToCanvas() {
-        $("img").each(function() {
-            var canvas = imgToCanvas(this);
-            $(this).replaceWith(canvas);
-            canvas.className = this.className;
-        });
-    }
-
-    function addLazyLoadToImgs() {
-        if (canvas_lazy_load) {
-            $("canvas").attr("loading", "lazy");
-        }
-    }
-
-    convertImgsToCanvas();
-    addLazyLoadToImgs();
-}
-
-if (notification_domain && !allowedDomains.includes(currentDomain)) {
-    Notification.requestPermission().then(function(result) {
-        console.log(result);
-        let permissionResult = Notification.permission;
-        if (permissionResult === "granted") {
-            showNotification();
-        } else if (permissionResult === "default") {
-            requestAndShowPermission();
-        } else {
-            alert("درخواست اعلان را به صورت عادی فعال کنید");
-        }
-    });
-
-    function requestAndShowPermission() {
-        Notification.requestPermission(function(result) {
-            if (result === "granted") {
-                showNotification();
+    /**
+     * Hide View Source Shortcut
+     */
+    function HideSourceCode(k) {
+        $(document).on("keydown", function(e) {
+            if (e.ctrlKey && e.keyCode === k) {
+                e.preventDefault();
             }
         });
     }
 
-    function showNotification() {
-        let title = body_notification;
-        let icon = image_src_notification;
-        let body = body_notification;
-        let notification = new Notification(title, { body, icon });
-        notification.onclick = () => {
-            notification.close();
-            window.parent.focus();
+    /**
+     * Block Copy
+     */
+    if (DisableCopy) {
+        $(document).on("keydown", function(e) {
+            if (e.ctrlKey && e.keyCode === 67) {
+                e.preventDefault();
+            }
+        });
+        $(document).on("copy", function(e) {
+            e.preventDefault();
+        });
+    }
+
+    /**
+     * Disable Paste
+     */
+    if (DisablePaste) {
+        $(document).on("keydown", function(e) {
+            if (e.ctrlKey && e.keyCode === 80) {
+                e.preventDefault();
+            }
+        });
+        $(document).on("paste", function(e) {
+            e.preventDefault();
+        });
+    }
+
+    /**
+     * Domain License
+     */
+    const DomainURL = new URL(window.location.href);
+    let TrapEn;
+
+    if (AllowedProtocol && !AllowedProtocol.includes(DomainURL.protocol)) {
+        TrapEn = true;
+    }
+
+    if (AllowedDomains && !AllowedDomains.includes(DomainURL.host)) {
+        TrapEn = true;
+    }
+
+    if (OfflineDomainChecker && (DomainURL.origin === 'files:' || DomainURL.protocol === 'file:')) {
+        TrapEn = true;
+    }
+
+    /**
+     * Set Page Password
+     */
+    if (PasswordPage) {
+        let hash__ = MD5.generate(PasswordPage);
+        let __check = MD5.generate(prompt("Enter The Password"));
+        if (__check !== hash__) {
+            TrapEn = true;
         }
     }
-    showNotification();
-}
 
+    /**
+     * Send Member To Blank Page
+     */
+    if (SendBlank) {
+        $(window).on('load', function() {
+            setInterval(function() {
+                window.open();
+            }, 5000);
+        });
+    }
+
+    /**
+     * Notify Before Window Close
+     */
+    window.onbeforeunload = function(e) {
+        return e;
+    };
+
+    /**
+     * Trap For Domain
+     */
+    let urlQuery = new URL(window.location.href).pathname + " " + $('title').text();
+
+    if (TrapEn) {
+        window.location.href = DomainTrapSend + "?" + encodeURIComponent(urlQuery);
+    }
+
+    /**
+     * Disable Drag Content
+     */
+    if (DisableDrag) {
+        $(document).on('dragstart dragover dragleave dragend', function(e) {
+            e.preventDefault();
+        });
+    }
+
+    /**
+     * Disable Iframe
+     */
+    if (DisableIframe) {
+        $('iframe').each(function() {
+            $(this).parent().append(overlay);
+        });
+    }
+
+    /**
+     * Disable Audio Download Button
+     */
+    if (DisableAudioDownload) {
+        $('audio').each(function() {
+            $(this).attr('controlsList', 'nodownload');
+            $(this).attr('preload', 'none');
+            $(this).css('-webkit-media-controls-enclosure', 'overflow:hidden');
+            $(this).css('-webkit-media-controls-panel', 'width: calc(100% + 30px);');
+        });
+    }
+
+    /**
+     * Disable F5
+     */
+    function DisableF5(F5, R) {
+        $(document).on("keydown", function(e) {
+            if (e.keyCode === F5 || (e.ctrlKey && e.keyCode === R) || (e.ctrlKey && e.shiftKey && e.keyCode === R) || (e.altKey && e.keyCode === R)) {
+                e.preventDefault();
+            }
+        });
+    }
+
+    /**
+     * Disable Full Screen
+     */
+    function FullScreen(F11) {
+        $(window).on("keydown", function(e) {
+            if (e.keyCode === F11) {
+                e.preventDefault();
+            }
+        });
+    }
+
+    /**
+     * lazysizes
+     */
+    let _IMG = $('img');
+
+    if (LazySizes) {
+        _IMG.each(function() {
+            $(this).addClass('lazyload');
+        });
+    }
+
+    /**
+     * Notification Tool
+     */
+    if (AllowNotification && !("Notification" in window)) {
+        swal("ارور !", "مرورگر شما از اعلان ها پشتیبانی نمیکند !", "error");
+    } else if (Notification.permission === "granted") {
+        new Notification(AllowNotification[0], {
+            body: AllowNotification[1],
+            icon: AllowNotification[2],
+            vibrate: true
+        });
+    } else {
+        Notification.requestPermission().then(function(permission) {
+            if (permission === "granted") {
+                new Notification(AllowNotification[0], {
+                    body: AllowNotification[1],
+                    icon: AllowNotification[2],
+                    vibrate: true
+                });
+            } else {
+                // Handle the case where user denies or blocks notifications
+                swal("ارور !", "مرورگر شما از اعلان ها پشتیبانی نمیکند !", "error");
+            }
+        });
+    }
+
+    /**
+     * Graphical Console Log
+     */
+    console.log("%c AntiRip.js v1.2", "color:red;background:black;border-radius:30px;box-shadow: 0 1px 10px 0 rgba(0,0,0,0.2);color: red;cursor: not-allowed;font-size:30px;padding:20px");
+
+    /**
+     * Block Screenhot Page
+     */
+    if (DisableScreenShot) {
+        let _Title = $('title').text();
+
+        function BlurPage() {
+            $('body').css('-webkit-filter', 'blur(5px)');
+            document.title = 'Take Mouse To Body !';
+        }
+
+        function UnBlur() {
+            $('body').css('-webkit-filter', 'blur(0px)');
+            document.title = _Title;
+        }
+
+        $(document).on('mouseleave', function() {
+            BlurPage();
+        });
+        $(document).on('mouseenter', function() {
+            UnBlur();
+        });
+    }
+
+    /**
+     * Online Or Offline
+     */
+    if (OfflineNotify) {
+        /**
+         * First Way
+         */
+        $(window).on('offline', function() {
+            swal('You Are Offline !', 'Turn On Network !', 'warning');
+        });
+
+        /**
+         * Second Way
+         */
+        if (!window.navigator.onLine) {
+            swal('You Are Offline !', 'Turn On Network !', 'warning');
+        }
+    }
+
+    /**
+     * Disable Zoom In Mobile
+     * فقط به متا تگ ویو پورت ، کدی اضافه میشه که از زوم جلوگیری میکنه
+     */
+    $('head').append('<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">')
+    /**
+     * For Chrome
+     */
+    $('body').style.zoom = 'reset'
+
+})

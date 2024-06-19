@@ -142,22 +142,7 @@ require 'php/config.php';
                                     <div class="checkbox-item">
                                         <input type="checkbox" class="form-check-input" id="customCheckBox5"
                                             value="DomainLicenseVars">
-                                        <label id="important">افزودن متغیر ترپ (ضروری)</label>
-                                    </div>
-                                    <div class="checkbox-item">
-                                        <input type="checkbox" class="form-check-input" id="customCheckBox5"
-                                            value="TrapDomain">
-                                        <label id="important">ترپ دامنه (ضروری)</label>
-                                    </div>
-                                    <div class="checkbox-item">
-                                        <input type="checkbox" class="form-check-input" id="customCheckBox5"
-                                            value="OverlayVars">
-                                        <label id="important">متغیر overlay (ضروری)</label>
-                                    </div>
-                                    <div class="checkbox-item">
-                                        <input type="checkbox" class="form-check-input" id="customCheckBox5"
-                                            value="IMGvar">
-                                        <label id="important">متغیر های تصویر (ضروری)</label>
+                                        <label id="important">افزودن متغیر ترپ </label>
                                     </div>
                                     <div class="checkbox-item">
                                         <input type="checkbox" class="form-check-input" id="debugMode customCheckBox5"
@@ -227,6 +212,16 @@ require 'php/config.php';
                                     </div>
                                     <div class="checkbox-item">
                                         <input type="checkbox" class="form-check-input" id="customCheckBox5"
+                                            value="DefaultValueVars">
+                                        <label>مقدار دهی اتوماتیک</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" class="form-check-input" id="customCheckBox5"
+                                            value="OptimizeJS">
+                                        <label id="important">توابع (ضروری)</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" class="form-check-input" id="customCheckBox5"
                                             value="PasswordPage">
                                         <label>پسورد صفحه</label>
                                     </div>
@@ -254,6 +249,11 @@ require 'php/config.php';
                                     </div>
                                     <div class="checkbox-item">
                                         <input type="checkbox" class="form-check-input" id="customCheckBox5"
+                                            value="OverlayVars">
+                                        <label id="important">متغیر overlay </label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" class="form-check-input" id="customCheckBox5"
                                             value="DisableAudioDownload">
                                         <label>غیر فعال کردن دانلود صدا</label>
                                     </div>
@@ -275,8 +275,8 @@ require 'php/config.php';
                                     </div>
                                     <div class="checkbox-item">
                                         <input type="checkbox" class="form-check-input" id="customCheckBox5"
-                                            value="AllowNotification">
-                                        <label>اعلان ها</label>
+                                            value="IMGvar">
+                                        <label id="important">متغیر های تصویر </label>
                                     </div>
                                     <div class="checkbox-item">
                                         <input type="checkbox" class="form-check-input" id="customCheckBox5"
@@ -323,6 +323,11 @@ require 'php/config.php';
                                         <input type="text" class="newname form-control input-default allowedDomains" placeholder="['sub.domain.ir','kharazmi.farhamaghdasi.ir']">
                                     </div>
                                     <div class="checkbox-item">
+                                        <input type="checkbox" class="form-check-input" id="customCheckBox5"
+                                            value="TrapDomain">
+                                        <label id="important">ترپ دامنه </label>
+                                    </div>
+                                    <div class="checkbox-item">
                                         <label for="domainTrapSend">صفحه ترپ دامنه</label>
                                         <input type="text" class="newname form-control input-default domainTrapSend" placeholder="kharazmi.farhamaghdasi.ir/assets/trap.php">
                                     </div>
@@ -335,9 +340,13 @@ require 'php/config.php';
                                         <input type="text" class="newname form-control input-default allowNotification" placeholder="['فرهام اقدسی','یک کتابخانه ساده جاوا اسکریپت']">
                                     </div>
                                     <div class="checkbox-item">
-                                        <label for="canvasIMG">تصاویر کنواس</label>
-                                        <input type="text" class="newname form-control input-default canvasIMG" placeholder="['red','vazirmatn','20px','right','تصاویر دارای کپی رایت هستند']">
+                                        <input type="checkbox" class="form-check-input" id="customCheckBox5"
+                                            value="AllowNotification">
+                                        <label id="important">اعلان ها</label>
                                     </div>
+
+
+
 
                                     <button id="updateButton" class="btn btn-primary">بروزرسانی و افزودن به کد</button>
 

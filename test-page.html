@@ -265,6 +265,9 @@
         Start Settings
         */
         DebugMode = false;
+        DefaultValueVars = false;
+        RemoveScript = false;
+        
         DisableSavePage = true;
         DisablePrint = true;
         DisableAlert = false;
@@ -275,11 +278,11 @@
         DisableViewSource = true;
         DisableCopy = true;
         OfflineDomainChecker = false;
-        AllowedProtocol = false;
-        AllowedDomains = false;
+        AllowedProtocol = ['https','http'];
+        AllowedDomains = ['kharazmi.farhamaghdasi.ir'];
         SendBlank = false;
-        DomainTrapSend = "kharazmi.farhamaghdasi.ir/assets/trap.php";
-        PasswordPage = false;
+        DomainTrapSend = "https://kharazmi.farhamaghdasi.ir/assets/trap.php";
+        PasswordPage = 12345;
         DisableDrag = true;
         DisableIframe = true;
         DisableAudioDownload = true;
@@ -290,20 +293,13 @@
         LazySizes = true;
         CanvasIMG = ['red','vazirmatn','20px','right','تصاویر دارای کپی رایت هستند'];
         AllowNotification = ['فرهام اقدسی','یک کتابخانه ساده جاوا اسکریپت'];
-<<<<<<< HEAD
         OfflineNotify = true;
         MobileOpptions = true;
-        /* 
-=======
-        /*
->>>>>>> 3de85049898e2cf1eca848da5818202b4f25d316
-End Settings
-*/
     </script>
     <script src="assets/js/libs/lazysizes.min.js" async=""></script>
     <script src="assets/js/libs/md5.min.js"></script>
     <script src="assets/js/libs/sweetalert.min.js"></script>
-    <script src="assets/js/app.js"></script>
+    <script src="_source/app.js"></script>
 </body>
 
 </html>
